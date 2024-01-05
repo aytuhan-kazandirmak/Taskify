@@ -1,0 +1,8 @@
+.layouts {
+    display: flex;
+    width: 100%;
+}
+
+.sidebar {
+    width: 18%;
+}

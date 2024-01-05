@@ -1,0 +1,29 @@
+.card {
+    width: auto;
+    height: 300px;
+    color: rgb(23 23 23);
+    padding: 12px;
+    row-gap: 24px;
+}
+
+.todos {
+    column-gap: 8px;
+    display: flex;
+}
+
+.new-list {
+    width: 272px;
+    background-color: #ffffff3d;
+    border-radius: 12px;
+    padding: 12px;
+    height: min-content;
+    cursor: pointer;
+}
+
+.new-list:hover {
+    background-color: #ffffff85;
+    transition: all 0.3s;
+}
+
+
+/* ŞU AN HAREKET ETTİRME İŞLEMİ TAMAMLANDI VİDEODAN SONRA YENİ İŞLEMLERE DEVAM ET*/

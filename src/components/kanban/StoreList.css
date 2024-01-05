@@ -1,0 +1,76 @@
+.items-container,
+.store-container {
+    width: 300px;
+}
+
+.item-container {
+    padding: 6px 12px;
+    border-radius: 8px;
+    background-color: rgb(255, 176, 189);
+    row-gap: 8px;
+}
+
+.store-container {
+    background-color: rgb(255, 127, 148);
+    font-weight: 600;
+    padding: 6px 12px;
+    border-radius: 8px 8px 0px 0px;
+}
+
+.items-container {
+    background-color: rgb(255, 152, 169);
+    padding: 6px;
+    border-radius: 0px 0px 8px 8px;
+    display: flex;
+    flex-direction: column;
+    row-gap: 8px;
+}
+
+.todos {
+    column-gap: 8px;
+    display: flex;
+}
+
+.new-list {
+    width: 272px;
+    background-color: #ffffff3d;
+    border-radius: 12px;
+    padding: 12px;
+    height: min-content;
+    cursor: pointer;
+}
+
+.new-list:hover {
+    background-color: #ffffff85;
+    transition: all 0.3s;
+}
+
+.new-card {
+    padding: 6px 12px;
+    border-radius: 8px;
+    background-color: rgb(255, 176, 189);
+    row-gap: 8px;
+}
+
+.new-card:hover {
+    background-color: rgb(255, 204, 213);
+}
+
+.item-container:hover {
+    background-color: rgb(255, 126, 150);
+}
+
+.input-container {
+    width: 100%;
+
+
+    /* Alternatif olarak overflow-wrap kullanabilirsiniz */
+}
+
+.create-card {
+    width: 100%;
+    background-color: rgb(255, 176, 189);
+    font-size: 14px;
+    max-height: 162px;
+    min-height: 80px;
+}
