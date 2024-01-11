@@ -5,8 +5,9 @@ import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 // import { authActions } from "../../reducer/firebaseSlice";
-import { login } from "../../reducer/firebaseSlice";
+import { login, logout } from "../../reducer/firebaseSlice";
 import { Dispatch } from "@reduxjs/toolkit";
+
 type Inputs = {
   email: string;
   password: string;
@@ -16,6 +17,7 @@ const Login = () => {
   const navigate = useNavigate();
   const dispatch: Dispatch<any> = useDispatch();
   // const { login, logout } = authActions;
+
   const loginFunc = async (dataObj: Inputs): Promise<void> => {
     try {
       const data = await signInWithEmailAndPassword(
@@ -24,12 +26,17 @@ const Login = () => {
         dataObj.password
       );
       const userDetails = data.user;
-      dispatch(login(userDetails));
-      navigate("/");
+      if (userDetails) {
+        dispatch(login(userDetails.email));
+        navigate("/");
+      } else {
+        dispatch(logout(undefined));
+      }
     } catch (error: unknown) {
       console.log(error);
     }
   };
+
   const {
     reset,
     register,

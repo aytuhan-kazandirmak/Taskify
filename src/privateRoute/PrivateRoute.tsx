@@ -7,7 +7,7 @@ type IprivateRoot = {
 };
 const PrivateRouteComponent: FC<IprivateRoot> = ({ children }) => {
   const userDetails = useSelector((state: RootState) => state.auth.userDetails);
-  console.log("privateee route içindeki", userDetails);
+
   if (!userDetails) {
     return <Navigate to="/login" replace />;
   }

@@ -1,27 +1,26 @@
 import { createSlice } from "@reduxjs/toolkit";
 type TState = {
   loading: boolean;
-  userDetails: null;
+  userDetails: string | undefined;
   error: null;
   success: boolean;
 };
-const initialState: TState = {
+const authInitialState: TState = {
   loading: false,
-  userDetails: null,
+  userDetails: undefined,
   error: null,
   success: false,
 };
 
 export const authSlice = createSlice({
   name: "authentication",
-  initialState: initialState,
+  initialState: authInitialState,
   reducers: {
     login(state, actions) {
       state.userDetails = actions.payload;
-      console.log("userdtaalllss", state.userDetails);
     },
     logout(state) {
-      state.userDetails = null;
+      state.userDetails = undefined;
     },
   },
 });

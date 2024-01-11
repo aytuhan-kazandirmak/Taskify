@@ -2,7 +2,6 @@
 
 import { Sidebar } from "flowbite-react";
 import {
-  HiArrowSmRight,
   HiChartPie,
   HiInbox,
   HiShoppingBag,
@@ -10,8 +9,12 @@ import {
   HiUser,
   HiViewBoards,
 } from "react-icons/hi";
+import { logout } from "../../reducer/firebaseSlice";
+import { useDispatch } from "react-redux";
+import { Link } from "react-router-dom";
 
 function SideBar() {
+  const dispatch = useDispatch();
   return (
     <Sidebar
       className="h-screen fixed"
@@ -41,12 +44,17 @@ function SideBar() {
           <Sidebar.Item href="#" icon={HiShoppingBag}>
             Products
           </Sidebar.Item>
-          <Sidebar.Item href="#" icon={HiArrowSmRight}>
-            Sign In
-          </Sidebar.Item>
           <Sidebar.Item href="#" icon={HiTable}>
             Sign Up
           </Sidebar.Item>
+          <Link
+            to={"/login"}
+            onClick={() => {
+              dispatch(logout());
+            }}
+          >
+            Logout
+          </Link>
         </Sidebar.ItemGroup>
       </Sidebar.Items>
     </Sidebar>

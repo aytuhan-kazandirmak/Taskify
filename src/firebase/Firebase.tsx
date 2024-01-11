@@ -5,6 +5,16 @@ import {
   signInWithEmailAndPassword,
   Auth,
 } from "firebase/auth";
+import {
+  getFirestore,
+  collection,
+  addDoc,
+  getDocs,
+  deleteDoc,
+  doc,
+  updateDoc,
+  onSnapshot,
+} from "firebase/firestore";
 const firebaseConfig = {
   apiKey: "AIzaSyA4n3pNpgUZSPCLBEpx2Mgw6XCPK5UHAtQ",
   authDomain: "taskify-43776.firebaseapp.com",
@@ -16,10 +26,18 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const auth: Auth = getAuth(app);
-
+const db = getFirestore(app);
 export {
   app,
   createUserWithEmailAndPassword,
   auth,
   signInWithEmailAndPassword,
+  db,
+  collection,
+  addDoc,
+  getDocs,
+  deleteDoc,
+  doc,
+  updateDoc,
+  onSnapshot,
 };

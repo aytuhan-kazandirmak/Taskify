@@ -4,49 +4,102 @@ import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import { IGroup } from "../../components/kanban/commonTypes";
 import StoreList from "../../components/kanban/StoreList";
 import CreateListModal from "../../components/create card/CreatListModale";
+import { useSelector } from "react-redux";
+import {
+  getDocs,
+  collection,
+  db,
+  doc,
+  deleteDoc,
+  updateDoc,
+  onSnapshot,
+} from "../../firebase/Firebase";
+import { useDispatch } from "react-redux";
+import { getAllList } from "../../reducer/getDataSlice";
+import { query } from "firebase/firestore";
+import { set } from "react-hook-form";
+
 type IDATA = IGroup[];
-const DATA: IDATA = [
-  {
-    id: "0e2f0db1-5457-46b0-949e-8032d2f9997a",
-    name: "Yapılacaklar",
-    items: [
-      { id: "26fd50b3-3841-496e-8b32-73636f6f4197", name: "3% Milk" },
-      { id: "b0ee9d50-d0a6-46f8-96e3-7f3f0f9a2525", name: "Butter" },
-    ],
-    tint: 1,
-  },
-  {
-    id: "487f68b4-1746-438c-920e-d67b7df46247",
-    name: "Onay Bekleyenler",
-    items: [
-      {
-        id: "95ee6a5d-f927-4579-8c15-2b4eb86210ae",
-        name: "Designing Data Intensive Applications",
-      },
-      { id: "5bee94eb-6bde-4411-b438-1c37fa6af364", name: "Atomic Habits" },
-    ],
-    tint: 2,
-  },
-  {
-    id: "25daffdc-aae0-4d73-bd31-43f73101e7c0",
-    name: "Tamamlanmışlar",
-    items: [
-      { id: "960cbbcf-89a0-4d79-aa8e-56abbc15eacc", name: "Workbench" },
-      { id: "d3edf796-6449-4931-a777-ff66965a025b", name: "Hammer" },
-    ],
-    tint: 3,
-  },
-];
 
 const HomePage = () => {
   const [openModal, setOpenModal] = useState(false);
-  const [stores, setStores] = useState(DATA);
-  useEffect(() => {
-    console.log(stores);
-  }, [stores]);
 
-  const handleDragDrop = (results: any) => {
+  const [deneme, setDeneme] = useState([]);
+  const auth = useSelector((state) => state.getData.auth);
+  /**********************************************************/ /**** */
+
+  /**********************************************************/ /**** */
+  useEffect(() => {
+    const userCardCollection = collection(
+      db,
+      "users",
+      auth,
+      "lists"
+      // Güncel authentication değerini kullan
+    );
+    const q = query(userCardCollection);
+    const unsubscribe = onSnapshot(
+      q,
+      (querySnapshot) => {
+        const cities = [];
+        querySnapshot.forEach((doc) => {
+          cities.push({ id: doc.id, ...doc.data() });
+        });
+        console.log("Current cities in CA: ", cities);
+        const sortedDeneme = cities.sort((a, b) => a.position - b.position);
+        setDeneme(sortedDeneme);
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
+
+    // useEffect temizlenme (cleanup) aşamasında unsubscribe fonksiyonunu çağır
+    return () => {
+      unsubscribe();
+    };
+
+    // useEffect bağımlılıkları arasına `deneme` eklemeyi unutmayın
+    // eğer `deneme` değeri bu efekte bağlıysa
+  }, []);
+
+  // useEffect(() => {
+  //   handleDataUpdate();
+  //   const sortedDeneme = deneme.sort((a, b) => a.position - b.position);
+  //   console.log("SIRALANMIŞ OLAN DİZİ", sortedDeneme);
+  // }, []);
+
+  // /**********************************************************/ /**** */
+  // console.log("DENEMEEE", deneme);
+  // const updatedDeneme = deneme.map((item, index) => ({
+  //   position: index + 1,
+  //   id: item.id,
+  //   name: item.name,
+  // }));
+  // console.log("updatedDeneme", updatedDeneme);
+  // const handleDataUpdate = async () => {
+  //   const userAddCardCollection = collection(db, "users", auth, "lists");
+
+  //   try {
+  //     await Promise.all(
+  //       updatedDeneme.map(async (item) => {
+  //         const dataSec = doc(userAddCardCollection, item.id);
+  //         await updateDoc(dataSec, {
+  //           position: item.position,
+  //         });
+  //       })
+  //     );
+
+  //     console.log("Güncelleme işlemi başarılı!");
+  //   } catch (error) {
+  //     console.error("Güncelleme hatası:", error);
+  //   }
+  // };
+
+  /**********************************************************/ /**** */
+  const handleDragDrop = async (results: any) => {
     const { source, destination, type } = results;
+
     if (!destination) return;
     if (
       source.droppableId === destination.droppableId &&
@@ -55,41 +108,67 @@ const HomePage = () => {
       return;
 
     if (type === "group") {
-      const reorderedStores = [...stores];
+      const reorderedStores = [...deneme];
       const sourceIndex = source.index;
       const [removedStore] = reorderedStores.splice(sourceIndex, 1);
+      // removedStore &&
       const destinationIndex = destination.index;
       reorderedStores.splice(destinationIndex, 0, removedStore);
-      return setStores(reorderedStores);
+      console.log("reorderedStores", reorderedStores);
+      const updatedDeneme = reorderedStores.map((item, index) => ({
+        position: index + 1,
+        id: item.id,
+        name: item.name,
+      }));
+      const handleDataUpdate = async () => {
+        const userAddCardCollection = collection(db, "users", auth, "lists");
+
+        try {
+          await Promise.all(
+            updatedDeneme.map(async (item) => {
+              const dataSec = doc(userAddCardCollection, item.id);
+              await updateDoc(dataSec, {
+                position: item.position,
+              });
+            })
+          );
+
+          console.log("Güncelleme işlemi başarılı!");
+        } catch (error) {
+          console.error("Güncelleme hatası:", error);
+        }
+      };
+
+      return handleDataUpdate();
     }
-    console.log({ destination, source });
-    const storeSourceIndex = stores.findIndex(
+    const storeSourceIndex = deneme.findIndex(
       (store) => store.id === source.droppableId
     );
-    const storeDestinationIndex = stores.findIndex(
+    const storeDestinationIndex = deneme.findIndex(
       (store) => store.id === destination.droppableId
     );
 
-    const newSourceItems = [...stores[storeSourceIndex].items];
+    const newSourceItems = [...deneme[storeSourceIndex].items];
     const newDestinationItems =
       source.droppableId !== destination.droppableId
-        ? [...stores[storeDestinationIndex].items]
+        ? [...deneme[storeDestinationIndex].items]
         : newSourceItems;
     const [deletedItem] = newSourceItems.splice(source.index, 1);
     newDestinationItems.splice(destination.index, 0, deletedItem);
 
-    const newStores = [...stores];
+    const newStores = [...deneme];
     newStores[storeSourceIndex] = {
-      ...stores[storeSourceIndex],
+      ...deneme[storeSourceIndex],
       items: newSourceItems,
     };
     newStores[storeDestinationIndex] = {
-      ...stores[storeDestinationIndex],
+      ...deneme[storeDestinationIndex],
       items: newDestinationItems,
     };
-
-    setStores(newStores);
+    setDeneme(newStores);
+    newStores.map((list) => console.log("NEW STORES", list.items));
   };
+  /**********************************************************/ /**** */
   return (
     <Layouts>
       <DragDropContext onDragEnd={handleDragDrop}>
@@ -101,10 +180,11 @@ const HomePage = () => {
                 {...provided.droppableProps}
                 ref={provided.innerRef}
               >
-                {stores.map((item, index) => (
+                {deneme.map((item, index) => (
                   <Draggable draggableId={item.id} key={item.id} index={index}>
                     {(provided: any) => (
                       <div
+                        onClick={() => {}}
                         className="todo rounded-lg"
                         {...provided.draggableProps}
                         {...provided.dragHandleProps}
@@ -119,7 +199,6 @@ const HomePage = () => {
                 <div
                   onClick={() => {
                     setOpenModal(true);
-                    console.log(openModal);
                   }}
                   className="new-list"
                 >

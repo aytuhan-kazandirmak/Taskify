@@ -1,10 +1,18 @@
 import { Button, Modal, Label, TextInput } from "flowbite-react";
 import React, { useEffect } from "react";
-
+import { useForm } from "react-hook-form";
+import { useDispatch } from "react-redux";
+import { createNewList } from "../../reducer/ProviderSlice";
+import { Dispatch } from "redux";
+import { getAllList } from "../../reducer/getDataSlice";
 type iProps = {
   setOpenModal: React.Dispatch<React.SetStateAction<boolean>>;
   openModal: boolean;
 };
+type Inputs = {
+  name: string;
+};
+
 const CreateListModal: React.FC<iProps> = ({ setOpenModal, openModal }) => {
   useEffect(() => {
     document.body.style.overflow = "hidden";
@@ -12,6 +20,14 @@ const CreateListModal: React.FC<iProps> = ({ setOpenModal, openModal }) => {
       document.body.style.overflow = "";
     };
   }, []);
+
+  const dispatch: Dispatch = useDispatch();
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<Inputs>();
 
   return (
     <>
@@ -24,26 +40,28 @@ const CreateListModal: React.FC<iProps> = ({ setOpenModal, openModal }) => {
         <Modal.Header />
         <Modal.Body>
           <div className="text-center">
-            <div className="flex flex-col justify-center gap-4">
+            <form
+              onSubmit={handleSubmit((data) => {
+                dispatch(createNewList(data));
+                setOpenModal(false);
+              })}
+              className="flex flex-col justify-center gap-4"
+            >
               <div>
-                <div className="mb-2 block text-start">
-                  <Label htmlFor="Başlık" value="Başlık" />
+                <div className="mb-2 block">
+                  <Label htmlFor="password1" value="Your password" />
                 </div>
                 <TextInput
-                  id="Baslik"
+                  {...register("name", { required: true })}
+                  id="name"
+                  type="name"
+                  autoFocus
                   placeholder="Liste başlığı girin..."
-                  required
                 />
+                {errors.name && <span>This field is required</span>}
               </div>
-              <div className="flex justify-center gap-4">
-                <Button color="failure" onClick={() => setOpenModal(false)}>
-                  {"Listeye Ekle"}
-                </Button>
-                <Button color="gray" onClick={() => setOpenModal(false)}>
-                  İptal
-                </Button>
-              </div>
-            </div>
+              <Button type="submit">Listeye Ekle</Button>
+            </form>
           </div>
         </Modal.Body>
       </Modal>
