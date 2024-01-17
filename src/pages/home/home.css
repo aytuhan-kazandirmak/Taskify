@@ -1,5 +1,5 @@
 .card {
-    width: auto;
+    width: max-content;
     height: 300px;
     color: rgb(23 23 23);
     padding: 12px;
@@ -9,15 +9,27 @@
 .todos {
     column-gap: 8px;
     display: flex;
+    transition: all 0.3;
 }
 
-.new-list {
+
+
+
+.new-list-2 {
     width: 272px;
-    background-color: #ffffff3d;
+    background-color: #DDA0DD;
     border-radius: 12px;
     padding: 12px;
     height: min-content;
     cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.new-list-2:hover {
+    background-color: #ffffff85;
+    transition: all 0.3s;
 }
 
 .new-list:hover {

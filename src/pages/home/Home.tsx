@@ -1,104 +1,99 @@
 import { useEffect, useState } from "react";
-import Layouts from "../../components/layout/Layouts";
-import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
+import {
+  DragDropContext,
+  Droppable,
+  Draggable,
+  DropResult,
+} from "react-beautiful-dnd";
+import { HiOutlinePlus } from "react-icons/hi";
 import { IGroup } from "../../components/kanban/commonTypes";
 import StoreList from "../../components/kanban/StoreList";
 import CreateListModal from "../../components/create card/CreatListModale";
 import { useSelector } from "react-redux";
 import {
-  getDocs,
   collection,
   db,
   doc,
-  deleteDoc,
   updateDoc,
   onSnapshot,
 } from "../../firebase/Firebase";
-import { useDispatch } from "react-redux";
-import { getAllList } from "../../reducer/getDataSlice";
-import { query } from "firebase/firestore";
-import { set } from "react-hook-form";
-
+import { RootState } from "../../reducer/store";
+import { deleteDoc, query } from "firebase/firestore";
+import "./home.css";
+import { useParams } from "react-router-dom";
 type IDATA = IGroup[];
 
-const HomePage = () => {
+const HomePage: React.FC = () => {
   const [openModal, setOpenModal] = useState(false);
+  const [deneme, setDeneme] = useState<IDATA>([]);
+  const params = useParams();
+  const auth = useSelector((state: RootState) => state.getData.auth);
 
-  const [deneme, setDeneme] = useState([]);
-  const auth = useSelector((state) => state.getData.auth);
-  /**********************************************************/ /**** */
-
-  /**********************************************************/ /**** */
   useEffect(() => {
     const userCardCollection = collection(
       db,
-      "users",
-      auth,
+      auth || "",
+      `${params.id}`,
       "lists"
-      // Güncel authentication değerini kullan
     );
+
     const q = query(userCardCollection);
+
     const unsubscribe = onSnapshot(
       q,
       (querySnapshot) => {
-        const cities = [];
+        const cities: IGroup[] = [];
         querySnapshot.forEach((doc) => {
           cities.push({ id: doc.id, ...doc.data() });
         });
-        console.log("Current cities in CA: ", cities);
-        const sortedDeneme = cities.sort((a, b) => a.position - b.position);
-        setDeneme(sortedDeneme);
+
+        const sortedData = cities.sort(
+          (a: any, b: any) => a.position - b.position
+        );
+        setDeneme(sortedData);
+        console.log("veri geldi");
       },
       (error) => {
         console.log(error);
       }
     );
 
-    // useEffect temizlenme (cleanup) aşamasında unsubscribe fonksiyonunu çağır
     return () => {
       unsubscribe();
     };
+  }, [auth]);
+  /********************************************************************** */
+  /********************************************************************** */
+  const removeCard = (listId, index, cardId) => {
+    const listCollection = collection(db, auth || "", `${params.id}`, "lists");
+    const listRef = doc(listCollection, listId);
+    console.log("listID:", listId);
+    deneme.forEach(async (list) => {
+      console.log("list id:", listId, "index no:", index, "cardId:", cardId);
+      if (list.id === listId) {
+        await updateDoc(listRef, {
+          items: list.items.filter((card) => card.id !== cardId),
+        });
+      }
+      return list;
+    });
+  };
+  const removeList = async (listId) => {
+    const listCollection = collection(db, auth || "", `${params.id}`, "lists");
+    const listRef = doc(listCollection, listId);
+    await deleteDoc(listRef);
+  };
+  /********************************************************************** */
+  /********************************************************************** */
 
-    // useEffect bağımlılıkları arasına `deneme` eklemeyi unutmayın
-    // eğer `deneme` değeri bu efekte bağlıysa
-  }, []);
-
-  // useEffect(() => {
-  //   handleDataUpdate();
-  //   const sortedDeneme = deneme.sort((a, b) => a.position - b.position);
-  //   console.log("SIRALANMIŞ OLAN DİZİ", sortedDeneme);
-  // }, []);
-
-  // /**********************************************************/ /**** */
-  // console.log("DENEMEEE", deneme);
-  // const updatedDeneme = deneme.map((item, index) => ({
-  //   position: index + 1,
-  //   id: item.id,
-  //   name: item.name,
-  // }));
-  // console.log("updatedDeneme", updatedDeneme);
-  // const handleDataUpdate = async () => {
-  //   const userAddCardCollection = collection(db, "users", auth, "lists");
-
-  //   try {
-  //     await Promise.all(
-  //       updatedDeneme.map(async (item) => {
-  //         const dataSec = doc(userAddCardCollection, item.id);
-  //         await updateDoc(dataSec, {
-  //           position: item.position,
-  //         });
-  //       })
-  //     );
-
-  //     console.log("Güncelleme işlemi başarılı!");
-  //   } catch (error) {
-  //     console.error("Güncelleme hatası:", error);
-  //   }
-  // };
-
-  /**********************************************************/ /**** */
-  const handleDragDrop = async (results: any) => {
-    const { source, destination, type } = results;
+  const handleDragDrop = async (results: DropResult) => {
+    const userAddCardCollection = collection(
+      db,
+      auth || "",
+      `${params.id}`,
+      "lists"
+    );
+    const { destination, source, draggableId, type } = results;
 
     if (!destination) return;
     if (
@@ -111,18 +106,17 @@ const HomePage = () => {
       const reorderedStores = [...deneme];
       const sourceIndex = source.index;
       const [removedStore] = reorderedStores.splice(sourceIndex, 1);
-      // removedStore &&
+
       const destinationIndex = destination.index;
       reorderedStores.splice(destinationIndex, 0, removedStore);
-      console.log("reorderedStores", reorderedStores);
+
       const updatedDeneme = reorderedStores.map((item, index) => ({
         position: index + 1,
         id: item.id,
         name: item.name,
       }));
-      const handleDataUpdate = async () => {
-        const userAddCardCollection = collection(db, "users", auth, "lists");
 
+      const handleListUpdate = async () => {
         try {
           await Promise.all(
             updatedDeneme.map(async (item) => {
@@ -139,83 +133,118 @@ const HomePage = () => {
         }
       };
 
-      return handleDataUpdate();
+      handleListUpdate();
     }
-    const storeSourceIndex = deneme.findIndex(
-      (store) => store.id === source.droppableId
-    );
-    const storeDestinationIndex = deneme.findIndex(
-      (store) => store.id === destination.droppableId
-    );
+    /************************************************************************************** */
+    /************************************************************************************** */
+    if (source.droppableId === destination.droppableId) {
+      const saveCardCollection = collection(
+        db,
+        auth || "",
+        `${params.id}`,
+        "lists"
+      );
+      const list = deneme.find((list) => list.id === source.droppableId);
 
-    const newSourceItems = [...deneme[storeSourceIndex].items];
-    const newDestinationItems =
-      source.droppableId !== destination.droppableId
-        ? [...deneme[storeDestinationIndex].items]
-        : newSourceItems;
-    const [deletedItem] = newSourceItems.splice(source.index, 1);
-    newDestinationItems.splice(destination.index, 0, deletedItem);
+      const updatedCards = list?.items.map((card, index) => {
+        if (index === source.index) {
+          return list.items[destination.index];
+        }
+        if (index === destination.index) {
+          return list.items[source.index];
+        }
+        return card;
+      });
+      const listRef = doc(saveCardCollection, destination.droppableId);
+      console.log("listRef", listRef.id);
+      await updateDoc(listRef, {
+        items: updatedCards,
+      });
+    } else {
+      const sourceList = deneme.find((list) => list.id === source.droppableId);
+      const destinationList = deneme.find(
+        (list) => list.id === destination.droppableId
+      );
+      const draggingCard = sourceList.items.filter(
+        (card) => card.id === draggableId
+      )[0];
+      console.log(sourceList, destinationList);
+      const sourceListRef = doc(
+        collection(db, auth || "", `${params.id}`, "lists"),
+        source.droppableId
+      );
 
-    const newStores = [...deneme];
-    newStores[storeSourceIndex] = {
-      ...deneme[storeSourceIndex],
-      items: newSourceItems,
-    };
-    newStores[storeDestinationIndex] = {
-      ...deneme[storeDestinationIndex],
-      items: newDestinationItems,
-    };
-    setDeneme(newStores);
-    newStores.map((list) => console.log("NEW STORES", list.items));
+      sourceList.items.splice(source.index, 1);
+      await updateDoc(sourceListRef, {
+        items: sourceList.items,
+      });
+
+      const destinationListRef = doc(
+        collection(db, auth || "", `${params.id}`, "lists"),
+        destination.droppableId
+      );
+      destinationList.items.splice(destination.index, 0, draggingCard);
+
+      await updateDoc(destinationListRef, {
+        items: destinationList.items,
+      });
+    }
   };
-  /**********************************************************/ /**** */
+
   return (
-    <Layouts>
-      <DragDropContext onDragEnd={handleDragDrop}>
-        <div className="card">
-          <Droppable droppableId="ROOT" type="group" direction="horizontal">
-            {(provided: any) => (
+    <DragDropContext onDragEnd={handleDragDrop}>
+      <div className="card">
+        <Droppable droppableId="ROOT" type="group" direction="horizontal">
+          {(provided) => (
+            <div
+              className="todos"
+              {...provided.droppableProps}
+              ref={provided.innerRef}
+            >
+              {deneme.map((item, index) => (
+                <Draggable draggableId={item.id} key={item.id} index={index}>
+                  {(provided) => (
+                    <div
+                      onClick={() => {}}
+                      className="todo rounded-lg"
+                      {...provided.draggableProps}
+                      {...provided.dragHandleProps}
+                      ref={provided.innerRef}
+                    >
+                      <StoreList
+                        {...item}
+                        index={index}
+                        removeCard={removeCard}
+                        removeList={removeList}
+                        params={params}
+                      />
+                    </div>
+                  )}
+                </Draggable>
+              ))}
+              {provided.placeholder}
               <div
-                className="todos"
-                {...provided.droppableProps}
-                ref={provided.innerRef}
+                onClick={() => {
+                  setOpenModal(true);
+                }}
+                className="new-list-2"
               >
-                {deneme.map((item, index) => (
-                  <Draggable draggableId={item.id} key={item.id} index={index}>
-                    {(provided: any) => (
-                      <div
-                        onClick={() => {}}
-                        className="todo rounded-lg"
-                        {...provided.draggableProps}
-                        {...provided.dragHandleProps}
-                        ref={provided.innerRef}
-                      >
-                        <StoreList {...item} />
-                      </div>
-                    )}
-                  </Draggable>
-                ))}
-                {provided.placeholder}
-                <div
-                  onClick={() => {
-                    setOpenModal(true);
-                  }}
-                  className="new-list"
-                >
-                  Yeni Liste Ekleyin
-                </div>
-                {openModal && (
-                  <CreateListModal
-                    setOpenModal={setOpenModal}
-                    openModal={openModal}
-                  />
-                )}
+                <div> Yeni Liste Ekleyin</div>
+                <HiOutlinePlus />
               </div>
-            )}
-          </Droppable>
-        </div>
-      </DragDropContext>
-    </Layouts>
+
+              {openModal && (
+                <CreateListModal
+                  setOpenModal={setOpenModal}
+                  openModal={openModal}
+                  params={params}
+                />
+              )}
+            </div>
+          )}
+        </Droppable>
+      </div>
+    </DragDropContext>
   );
 };
 

@@ -3,6 +3,7 @@ import { useForm } from "react-hook-form";
 import "./signup.module.css";
 import { createUserWithEmailAndPassword, auth } from "../../firebase/Firebase";
 import { updateProfile } from "firebase/auth";
+import { useNavigate } from "react-router-dom";
 type Inputs = {
   fullname: string;
   email: string;
@@ -17,6 +18,7 @@ const Signup = () => {
     formState: { errors },
   } = useForm<Inputs>();
 
+  const navigate = useNavigate();
   const registerFunc = async (dataObj: Inputs): Promise<any> => {
     console.log(dataObj);
     try {
@@ -33,13 +35,14 @@ const Signup = () => {
       });
 
       console.log("current user", auth.currentUser);
+      navigate("/login");
       return update;
     } catch (error: any) {
       console.log(error.message);
     }
   };
   return (
-    <div className="flex w-full h-screen justify-center items-center bg-lime-300">
+    <div className="flex w-full h-screen justify-center items-center signup">
       <form
         onSubmit={handleSubmit((data) => {
           if (data.password1 === data.password2) {
@@ -52,7 +55,11 @@ const Signup = () => {
       >
         <div>
           <div className="mb-2 block">
-            <Label htmlFor="email2" value="Your Fullname" />
+            <Label
+              className="text-slate-200"
+              htmlFor="email2"
+              value="Your Fullname"
+            />
           </div>
           <TextInput
             {...register("fullname")}
@@ -65,7 +72,11 @@ const Signup = () => {
         </div>
         <div>
           <div className="mb-2 block">
-            <Label htmlFor="email2" value="Your email" />
+            <Label
+              className="text-slate-200"
+              htmlFor="email2"
+              value="Your email"
+            />
           </div>
           <TextInput
             {...register("email")}
@@ -78,7 +89,11 @@ const Signup = () => {
         </div>
         <div>
           <div className="mb-2 block">
-            <Label htmlFor="password2" value="Your password" />
+            <Label
+              className="text-slate-200"
+              htmlFor="password2"
+              value="Your password"
+            />
           </div>
           <TextInput
             {...register("password2")}
@@ -91,7 +106,11 @@ const Signup = () => {
         </div>
         <div>
           <div className="mb-2 block">
-            <Label htmlFor="repeat-password" value="Repeat password" />
+            <Label
+              className="text-slate-200"
+              htmlFor="repeat-password"
+              value="Repeat password"
+            />
           </div>
           <TextInput
             {...register("password1")}
@@ -103,7 +122,7 @@ const Signup = () => {
         </div>
         <div className="flex items-center gap-2">
           <Checkbox id="agree" />
-          <Label htmlFor="agree" className="flex">
+          <Label htmlFor="agree" className="flex text-slate-200">
             I agree with the&nbsp;
             <a
               href="#"

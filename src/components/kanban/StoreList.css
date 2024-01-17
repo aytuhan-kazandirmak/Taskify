@@ -8,6 +8,9 @@
     border-radius: 8px;
     background-color: rgb(255, 176, 189);
     row-gap: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
 .store-container {
@@ -31,19 +34,7 @@
     display: flex;
 }
 
-.new-list {
-    width: 272px;
-    background-color: #ffffff3d;
-    border-radius: 12px;
-    padding: 12px;
-    height: min-content;
-    cursor: pointer;
-}
 
-.new-list:hover {
-    background-color: #ffffff85;
-    transition: all 0.3s;
-}
 
 .new-card {
     padding: 6px 12px;

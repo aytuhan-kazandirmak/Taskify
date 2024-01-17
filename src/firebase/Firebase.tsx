@@ -13,7 +13,9 @@ import {
   deleteDoc,
   doc,
   updateDoc,
+  getDoc,
   onSnapshot,
+  orderBy,
 } from "firebase/firestore";
 const firebaseConfig = {
   apiKey: "AIzaSyA4n3pNpgUZSPCLBEpx2Mgw6XCPK5UHAtQ",
@@ -39,5 +41,7 @@ export {
   deleteDoc,
   doc,
   updateDoc,
+  getDoc,
   onSnapshot,
+  orderBy,
 };

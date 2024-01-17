@@ -1,20 +1,14 @@
-"use client";
-
 import { Sidebar } from "flowbite-react";
-import {
-  HiChartPie,
-  HiInbox,
-  HiShoppingBag,
-  HiTable,
-  HiUser,
-  HiViewBoards,
-} from "react-icons/hi";
+import { HiViewBoards } from "react-icons/hi";
+import { PiChalkboardSimpleFill } from "react-icons/pi";
+import { IoLogOutOutline } from "react-icons/io5";
 import { logout } from "../../reducer/firebaseSlice";
 import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 
 function SideBar() {
   const dispatch = useDispatch();
+
   return (
     <Sidebar
       className="h-screen fixed"
@@ -29,32 +23,21 @@ function SideBar() {
       </Sidebar.Logo>
       <Sidebar.Items>
         <Sidebar.ItemGroup>
-          <Sidebar.Item href="#" icon={HiChartPie}>
-            Dashboard
-          </Sidebar.Item>
-          <Sidebar.Item href="#" icon={HiViewBoards}>
-            Kanban
-          </Sidebar.Item>
-          <Sidebar.Item href="#" icon={HiInbox}>
-            Inbox
-          </Sidebar.Item>
-          <Sidebar.Item href="#" icon={HiUser}>
-            Users
-          </Sidebar.Item>
-          <Sidebar.Item href="#" icon={HiShoppingBag}>
-            Products
-          </Sidebar.Item>
-          <Sidebar.Item href="#" icon={HiTable}>
-            Sign Up
-          </Sidebar.Item>
-          <Link
-            to={"/login"}
+          <Link to={"/"}>
+            <Sidebar.Item icon={PiChalkboardSimpleFill}>Panolar</Sidebar.Item>
+          </Link>
+          <Link className="w-full" to={"/home"}>
+            <Sidebar.Item icon={HiViewBoards}>Board</Sidebar.Item>
+          </Link>
+          <Sidebar.Item
             onClick={() => {
               dispatch(logout());
             }}
+            href="/login"
+            icon={IoLogOutOutline}
           >
             Logout
-          </Link>
+          </Sidebar.Item>
         </Sidebar.ItemGroup>
       </Sidebar.Items>
     </Sidebar>

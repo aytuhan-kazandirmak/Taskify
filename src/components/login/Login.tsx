@@ -3,11 +3,11 @@ import { signInWithEmailAndPassword, auth } from "../../firebase/Firebase";
 import { useForm } from "react-hook-form";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 // import { authActions } from "../../reducer/firebaseSlice";
 import { login, logout } from "../../reducer/firebaseSlice";
 import { Dispatch } from "@reduxjs/toolkit";
-
+import "./login.css";
 type Inputs = {
   email: string;
   password: string;
@@ -49,7 +49,7 @@ const Login = () => {
     }
   }, [isSubmitSuccessful, reset]);
   return (
-    <div className="flex w-full h-screen justify-center items-center bg-lime-300">
+    <div className="flex w-full h-screen justify-center items-center login">
       <form
         onSubmit={handleSubmit((data) => {
           loginFunc(data);
@@ -58,7 +58,11 @@ const Login = () => {
       >
         <div>
           <div className="mb-2 block">
-            <Label htmlFor="email1" value="Your email" />
+            <Label
+              className="text-slate-200"
+              htmlFor="email1"
+              value="Your email"
+            />
           </div>
           <TextInput
             {...register("email")}
@@ -69,7 +73,11 @@ const Login = () => {
         </div>
         <div>
           <div className="mb-2 block">
-            <Label htmlFor="password1" value="Your password" />
+            <Label
+              className="text-slate-200"
+              htmlFor="password1"
+              value="Your password"
+            />
           </div>
           <TextInput
             {...register("password", { required: true })}
@@ -81,9 +89,15 @@ const Login = () => {
         </div>
         <div className="flex items-center gap-2">
           <Checkbox id="remember" />
-          <Label htmlFor="remember">Remember me</Label>
+          <Label className="text-slate-200" htmlFor="remember">
+            Remember me
+          </Label>
         </div>
         <Button type="submit">Submit</Button>
+
+        <Link to={"/signup"}>
+          <Button className="w-full">Register</Button>
+        </Link>
       </form>
     </div>
   );

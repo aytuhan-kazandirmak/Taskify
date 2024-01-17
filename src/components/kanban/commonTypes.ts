@@ -1,11 +1,16 @@
 export interface IItem {
+  createdBy: string;
   id: string;
   name: string;
+  parentId: string;
+  position?: any;
 }
 
 export interface IGroup {
+  createdBy: string;
+  email: string;
   id: string;
-  name: string;
   items: IItem[];
-  tint?: number;
+  name: string;
+  position?: any;
 }

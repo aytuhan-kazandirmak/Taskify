@@ -11,12 +11,14 @@ interface UsersState {
   loading: "idle" | "loading" | "succeeded" | "failed";
   error: string | undefined;
   authentication: string | undefined;
+  boardId: string | undefined;
 }
 
 const providerInitialState: UsersState = {
   loading: "idle",
   error: "",
   authentication: "",
+  boardId: "",
 };
 
 export const createNewList = createAsyncThunk<
@@ -28,23 +30,23 @@ export const createNewList = createAsyncThunk<
   try {
     const userAddCardCollection = collection(
       db,
-      "users",
-      state.provider.authentication || "", // null ya da undefined durumlarına karşı kontrol ekleyin
+      state.provider.authentication || "",
+      data.boardId.id,
       "lists"
     );
 
+    console.log("STATE BOARD NAME", data.boardId.id);
     const docRef = await addDoc(userAddCardCollection, data);
 
     const selecetedData = doc(userAddCardCollection, docRef.id);
-    console.log("SELECETED DATA PROVİDER", selecetedData);
 
     const updateSelectedData = await updateDoc(selecetedData, {
       id: docRef.id,
-      email: state.provider.authentication || "", // null ya da undefined durumlarına karşı kontrol ekleyin
-      createdBy: state.provider.authentication || "", // null ya da undefined durumlarına karşı kontrol ekleyin
+      email: state.provider.authentication || "",
+      createdBy: state.provider.authentication || "",
       items: [],
     });
-
+    console.log("ekeleme başarılı");
     return updateSelectedData;
   } catch (error) {
     console.error("Error adding document: ", error);
@@ -54,7 +56,12 @@ export const createNewList = createAsyncThunk<
 export const providerSlice = createSlice({
   name: "provider",
   initialState: providerInitialState,
-  reducers: {},
+  reducers: {
+    getBoardId(state, actions) {
+      console.log("BOARD NAME", actions.payload);
+      state.boardId = actions.payload;
+    },
+  },
   extraReducers(builder) {
     builder
       .addCase(createNewList.pending, (state) => {
@@ -78,4 +85,4 @@ export const providerSlice = createSlice({
   },
 });
 
-export const {} = providerSlice.actions;
+export const { getBoardId } = providerSlice.actions;

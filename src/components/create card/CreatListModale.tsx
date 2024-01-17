@@ -4,23 +4,32 @@ import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
 import { createNewList } from "../../reducer/ProviderSlice";
 import { Dispatch } from "redux";
-import { getAllList } from "../../reducer/getDataSlice";
+import { getBoardId } from "../../reducer/ProviderSlice";
+
 type iProps = {
   setOpenModal: React.Dispatch<React.SetStateAction<boolean>>;
   openModal: boolean;
+  params: Iparams;
+};
+type Iparams = {
+  id: string;
 };
 type Inputs = {
   name: string;
 };
 
-const CreateListModal: React.FC<iProps> = ({ setOpenModal, openModal }) => {
+const CreateListModal: React.FC<iProps> = ({
+  setOpenModal,
+  openModal,
+  params,
+}) => {
   useEffect(() => {
     document.body.style.overflow = "hidden";
     return () => {
       document.body.style.overflow = "";
     };
   }, []);
-
+  console.log("CREATELİSTMODAL", params);
   const dispatch: Dispatch = useDispatch();
 
   const {
@@ -42,7 +51,8 @@ const CreateListModal: React.FC<iProps> = ({ setOpenModal, openModal }) => {
           <div className="text-center">
             <form
               onSubmit={handleSubmit((data) => {
-                dispatch(createNewList(data));
+                dispatch(createNewList({ ...data, boardId: params }));
+
                 setOpenModal(false);
               })}
               className="flex flex-col justify-center gap-4"

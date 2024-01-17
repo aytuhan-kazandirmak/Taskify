@@ -1,31 +1,25 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { login, logout } from "./firebaseSlice";
-import {
-  db,
-  collection,
-  addDoc,
-  doc,
-  updateDoc,
-  getDocs,
-} from "../firebase/Firebase";
+import { db, collection, doc, updateDoc } from "../firebase/Firebase";
 import { arrayUnion } from "firebase/firestore";
 import { RootState } from "./store";
+
 interface UsersState {
   loading: "idle" | "loading" | "succeeded" | "failed";
   error: string | undefined;
   authentication: string | undefined;
 }
 
-type Idata = {
+interface Idata {
   name: string;
-  parentId: string;
-};
+  parentId: string; // parentId tipi belirtildi
+}
 
-const initialCardState = {
+const initialCardState: UsersState = {
   loading: "idle",
   error: "",
   authentication: "",
-} as UsersState;
+};
 
 export const addNewCard = createAsyncThunk<void, Idata, { state: RootState }>(
   "post/addCard",
@@ -35,8 +29,8 @@ export const addNewCard = createAsyncThunk<void, Idata, { state: RootState }>(
     try {
       const userAddCardCollection = collection(
         db,
-        "users",
-        state.addCard.authentication,
+        state.addCard.authentication || "",
+        data.boardId.id, // null ya da undefined durumlarına karşı kontrol ekledim
         "lists"
       );
       let chars =
@@ -50,14 +44,13 @@ export const addNewCard = createAsyncThunk<void, Idata, { state: RootState }>(
       const newData = {
         ...data,
         id: `${str}`,
-        createdBy: state.addCard.authentication,
+        createdBy: state.addCard.authentication || "", // null ya da undefined durumlarına karşı kontrol ekledim
       };
       const updateCardList = await updateDoc(selectList, {
         items: arrayUnion(newData),
       });
       console.log("SEÇİLEN DATA", selectList);
-
-      // Rastgele karakter seçimi
+      return updateCardList;
     } catch (error) {
       console.log("ERROR", error);
     }
@@ -73,13 +66,12 @@ export const addCardSlice = createSlice({
       .addCase(addNewCard.pending, (state) => {
         state.loading = "loading";
       })
-      .addCase(addNewCard.fulfilled, (state: any) => {
+      .addCase(addNewCard.fulfilled, (state) => {
         state.loading = "succeeded";
-        // state.newList.push(action.payload);
       })
       .addCase(addNewCard.rejected, (state, action) => {
         state.loading = "failed";
-        state.error = action.error.message;
+        state.error = action.error?.message; // action.error kontrolü ekledim
       });
     builder
       .addCase(login, (state, action) => {
