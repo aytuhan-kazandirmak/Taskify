@@ -4,6 +4,7 @@ import { providerSlice } from "./ProviderSlice";
 import { getDataSlice } from "./getDataSlice";
 import { addCardSlice } from "./addNewCard";
 import { createBoardSlice } from "./addNewBoard";
+
 const store = configureStore({
   reducer: {
     auth: authSlice.reducer,
@@ -11,6 +12,7 @@ const store = configureStore({
     getData: getDataSlice.reducer,
     addCard: addCardSlice.reducer,
     addNewBoard: createBoardSlice.reducer,
+    addNewGroupBoard: createBoardSlice.reducer,
   },
 });
 export type RootState = ReturnType<typeof store.getState>;

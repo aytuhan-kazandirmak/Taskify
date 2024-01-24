@@ -112,17 +112,17 @@ const StoreList: React.FC<StoreListProps> = ({
                   {errors.name && <span>This field is required</span>}
                 </div>
                 <div className="flex justify-start gap-4">
-                  <button
+                  <Button
                     type="submit"
                     onClick={() => {}}
                     size="sm"
                     gradientMonochrome="failure"
                   >
                     Kart Ekle
-                  </button>
-                  <button color="gray" onClick={handleCancelCreateCard}>
+                  </Button>
+                  <Button color="gray" onClick={handleCancelCreateCard}>
                     Kapat
-                  </button>
+                  </Button>
                 </div>
               </form>
             ) : (

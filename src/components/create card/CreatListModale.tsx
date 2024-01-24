@@ -4,8 +4,6 @@ import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
 import { createNewList } from "../../reducer/ProviderSlice";
 import { Dispatch } from "redux";
-import { getBoardId } from "../../reducer/ProviderSlice";
-
 type iProps = {
   setOpenModal: React.Dispatch<React.SetStateAction<boolean>>;
   openModal: boolean;

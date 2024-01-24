@@ -26,7 +26,7 @@ function SideBar() {
           <Link to={"/"}>
             <Sidebar.Item icon={PiChalkboardSimpleFill}>Panolar</Sidebar.Item>
           </Link>
-          <Link className="w-full" to={"/home"}>
+          <Link className="w-full" to={"/groupboard"}>
             <Sidebar.Item icon={HiViewBoards}>Board</Sidebar.Item>
           </Link>
           <Sidebar.Item

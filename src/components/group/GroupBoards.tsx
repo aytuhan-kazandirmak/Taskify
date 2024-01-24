@@ -1,10 +1,8 @@
-import { useForm } from "react-hook-form";
 import { Button, Modal, TextInput } from "flowbite-react";
-import { useDispatch } from "react-redux";
-import { createNewField } from "../../reducer/addNewBoard";
-import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
-import { IGroup } from "../kanban/commonTypes";
+import { useForm } from "react-hook-form";
+import { useDispatch, useSelector } from "react-redux";
+import { addGroupBoard } from "../../reducer/addNewGroupSlice";
 import {
   collection,
   deleteDoc,
@@ -13,37 +11,31 @@ import {
   query,
 } from "firebase/firestore";
 import { db } from "../../firebase/Firebase";
-import { useNavigate } from "react-router-dom";
 import { BsThreeDotsVertical } from "react-icons/bs";
-
-import { Fragment } from "react";
+import { useNavigate } from "react-router-dom";
 import { Menu, Transition } from "@headlessui/react";
-import MemberModal from "../member modal/MemberModal";
-
+import { Fragment } from "react";
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
-const CreateBoard = () => {
+const GroupBoards = () => {
   const [openModal, setOpenModal] = useState(false);
-  const [addMember, setAddMember] = useState(false);
-  const [memberEmail, setMemberEmail] = useState("");
-  console.log("asdasdasdasdasdasd", memberEmail);
-  const [boards, setBoards] = useState([]);
+  const [groupBoards, setGroupBoards] = useState([]);
   const auth = useSelector((state) => state.auth.userDetails);
   const navigate = useNavigate();
   useEffect(() => {
-    const userCardCollection = collection(db, auth || "");
+    const userCardCollection = collection(db, "group-board");
 
     const q = query(userCardCollection);
 
     const unsubscribe = onSnapshot(
       q,
       (querySnapshot) => {
-        const cities: IGroup[] = [];
+        const cities = [];
         querySnapshot.forEach((doc) => {
           cities.push({ id: doc.id, ...doc.data() });
         });
-        setBoards(cities);
+        setGroupBoards(cities);
         console.log("BOARDLAR", cities);
       },
       (error) => {
@@ -55,21 +47,11 @@ const CreateBoard = () => {
       unsubscribe();
     };
   }, [auth]);
-  console.log("DATAAAAA", addMember);
   const removeBoard = async (boardId) => {
-    const listCollection = collection(db, auth || "");
+    const listCollection = collection(db, "group-board");
     const listRef = doc(listCollection, boardId);
     await deleteDoc(listRef);
   };
-  // const addNewMember = async (boardId) => {
-  //   const boardCollection = collection(db, auth || "");
-  //   const listRef = doc(boardCollection, boardId);
-  //   const addMember = await updateDoc(listRef, {
-  //     member: memberEmail.email,
-  //   });
-  //   return addMember;
-  // };
-
   const dispatch = useDispatch();
   const {
     reset,
@@ -83,15 +65,15 @@ const CreateBoard = () => {
   }, [isSubmitSuccessful, openModal]);
   return (
     <div className="flex p-4">
-      <div className="flex  gap-8 flex-wrap ">
+      <div className="flex  gap-8 flex-wrap">
         <Button
           className="w-[272px] h-[88px]"
           onClick={() => setOpenModal(true)}
         >
-          Yeni Pano
+          Yeni Grup Pano
         </Button>
-        {boards &&
-          boards.map((board, index) => (
+        {groupBoards &&
+          groupBoards.map((board, index) => (
             <div
               key={index}
               className="w-[272px] bg-[#800080]  flex rounded-lg text-slate-200  ease-linear duration-75"
@@ -130,7 +112,7 @@ const CreateBoard = () => {
                               <span
                                 onClick={() => {
                                   // addNewMember(board.id);
-                                  setAddMember(true);
+
                                   console.log("board iddddddd", board.id);
                                 }}
                                 className={classNames(
@@ -148,8 +130,8 @@ const CreateBoard = () => {
                             {({ active }) => (
                               <span
                                 onClick={() => {
-                                  removeBoard(board.id);
                                   console.log("BOOOOARD İD", board.id);
+                                  removeBoard(board.id);
                                 }}
                                 className={classNames(
                                   active
@@ -168,14 +150,6 @@ const CreateBoard = () => {
                   </Menu>
                 </div>
               </div>
-              {addMember && (
-                <MemberModal
-                  board={board}
-                  setMemberEmail={setMemberEmail}
-                  setAddMember={setAddMember}
-                  addMember={addMember}
-                />
-              )}
             </div>
           ))}
       </div>
@@ -189,7 +163,7 @@ const CreateBoard = () => {
         <Modal.Body>
           <form
             onSubmit={handleSubmit((data) => {
-              dispatch(createNewField(data));
+              dispatch(addGroupBoard(data));
               setOpenModal(false);
             })}
             className="text-center"
@@ -198,7 +172,7 @@ const CreateBoard = () => {
               autoFocus
               {...register("name", { required: true })}
               id="email"
-              placeholder="Bir pano oluşturun"
+              placeholder="Bir grup panosu oluşturun"
               required
             />
             {errors.name && <span>This field is required</span>}
@@ -217,4 +191,4 @@ const CreateBoard = () => {
   );
 };
 
-export default CreateBoard;
+export default GroupBoards;

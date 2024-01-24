@@ -27,6 +27,7 @@ const HomePage: React.FC = () => {
   const [openModal, setOpenModal] = useState(false);
   const [deneme, setDeneme] = useState<IDATA>([]);
   const params = useParams();
+  console.log("ZIIIIIIIIIIIIII", params);
   const auth = useSelector((state: RootState) => state.getData.auth);
 
   useEffect(() => {
