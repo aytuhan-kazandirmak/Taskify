@@ -1,22 +1,21 @@
 import { Droppable, Draggable, DraggableProvided } from "react-beautiful-dnd";
 import { Button } from "flowbite-react";
-import { IGroup, IItem } from "./commonTypes";
-import "./StoreList.css";
 import { useEffect, useState } from "react";
 import { Textarea } from "flowbite-react";
 import { HiOutlinePlus } from "react-icons/hi";
 import { AiFillDelete } from "react-icons/ai";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { useDispatch } from "react-redux";
-import { addNewCard } from "../../reducer/addNewCard";
-
+import { addNewGroupCard } from "../../reducer/addNewGroupList";
+import { IGroup, IItem } from "../kanban/commonTypes";
+import "./grupstorelist.css";
+import { collection, doc, getDoc } from "firebase/firestore";
+import { db } from "../../firebase/Firebase";
 type Inputs = {
   name: string;
 };
-
 interface StoreListProps extends IGroup {}
-
-const StoreList: React.FC<StoreListProps> = ({
+const GrupStoreList: React.FC<StoreListProps> = ({
   name,
   items,
   id,
@@ -24,11 +23,12 @@ const StoreList: React.FC<StoreListProps> = ({
   removeCard,
   removeList,
   params,
+  boardName,
 }) => {
   // const newItems = items.sort((a, b) => a.position - b.position);
 
   const dispatch = useDispatch();
-  console.log("STORELİST PARAMS", params);
+
   const {
     reset,
     register,
@@ -53,15 +53,19 @@ const StoreList: React.FC<StoreListProps> = ({
   };
 
   const handleAddCard: SubmitHandler<Inputs> = (data) => {
-    console.log("DATAAAAAAAAAAAAAAAAAA", data);
-    dispatch(addNewCard({ ...data, parentId: id, boardId: params }));
+    console.log("DATAAAAAAAAAAAAAAAAAA", {
+      ...data,
+      parentId: params,
+      boardId: params,
+    });
+    dispatch(addNewGroupCard({ ...data, parentId: id, boardId: params }));
   };
 
   return (
     <Droppable droppableId={id}>
       {(provided) => (
         <div {...provided.droppableProps} ref={provided.innerRef}>
-          <div className="store-container flex justify-between items-center ">
+          <div className="store-container bg-zinc-800 text-gray-400 flex justify-between items-center ">
             <h3>{name}</h3>
             <div
               onClick={() => {
@@ -72,7 +76,7 @@ const StoreList: React.FC<StoreListProps> = ({
               <AiFillDelete size={24} />
             </div>
           </div>
-          <div className="items-container">
+          <div className="items-container bg-zinc-800">
             {items &&
               items.map((item: IItem, index: number) => (
                 <Draggable draggableId={item.id} index={index} key={item.id}>
@@ -82,7 +86,7 @@ const StoreList: React.FC<StoreListProps> = ({
                       {...provided.draggableProps}
                       ref={provided.innerRef}
                     >
-                      <div className="item-container">
+                      <div className="item-container bg-zinc-600 hover:bg-zinc-400 text-gray-200">
                         <h4 className="w-5/6">{item.name}</h4>
                         <div
                           onClick={() => {
@@ -103,7 +107,7 @@ const StoreList: React.FC<StoreListProps> = ({
                 <div className="input-container">
                   <Textarea
                     {...register("name", { required: true })}
-                    className="create-card bg-[rgb(255, 176, 189)] border-none"
+                    className="create-card bg-zinc-600 border-none text-gray-200 placeholder:text-gray-400 my-2"
                     autoFocus
                     required
                     rows={2}
@@ -116,7 +120,7 @@ const StoreList: React.FC<StoreListProps> = ({
                     type="submit"
                     onClick={() => {}}
                     size="sm"
-                    gradientMonochrome="failure"
+                    className="bg-[#2e2e2e] hover:bg-zinc-900"
                   >
                     Kart Ekle
                   </Button>
@@ -128,7 +132,7 @@ const StoreList: React.FC<StoreListProps> = ({
             ) : (
               <div
                 onClick={handleCreateCard}
-                className="new-card flex justify-between items-center"
+                className="new-card bg-zinc-600 hover:bg-zinc-500 text-gray-200 flex justify-between items-center py-3"
               >
                 <div>Kart ekle</div>
                 <HiOutlinePlus />
@@ -141,4 +145,4 @@ const StoreList: React.FC<StoreListProps> = ({
   );
 };
 
-export default StoreList;
+export default GrupStoreList;

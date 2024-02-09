@@ -21,17 +21,18 @@ const providerInitialState: UsersState = {
   boardId: "",
 };
 
-export const createNewList = createAsyncThunk<
+export const createNewGroupList = createAsyncThunk<
   void,
   Inputs,
   { state: RootState }
->("posts/fetchPosts", async (data, { getState }) => {
+>("posts/fetchGroupPosts", async (data, { getState }) => {
   const state = getState();
+  console.log("AKAAAAAAAAAAAAAA", data);
   try {
     const userAddCardCollection = collection(
       db,
-      state.provider.authentication || "",
-      data.boardId.id,
+      "group-boards",
+      data.boardId,
       "lists"
     );
 
@@ -42,8 +43,8 @@ export const createNewList = createAsyncThunk<
 
     const updateSelectedData = await updateDoc(selecetedData, {
       id: docRef.id,
-      email: state.provider.authentication || "",
-      createdBy: state.provider.authentication || "",
+      email: state.providerGroup.authentication || "",
+      createdBy: state.providerGroup.authentication || "",
       items: [],
     });
     console.log("ekeleme başarılı");
@@ -53,25 +54,25 @@ export const createNewList = createAsyncThunk<
   }
 });
 
-export const providerSlice = createSlice({
+export const providerGroupSlice = createSlice({
   name: "provider",
   initialState: providerInitialState,
   reducers: {
-    getBoardId(state, actions) {
+    getGroupBoardId(state, actions) {
       console.log("BOARD NAME", actions.payload);
       state.boardId = actions.payload;
     },
   },
   extraReducers(builder) {
     builder
-      .addCase(createNewList.pending, (state) => {
+      .addCase(createNewGroupList.pending, (state) => {
         state.loading = "loading";
       })
-      .addCase(createNewList.fulfilled, (state) => {
+      .addCase(createNewGroupList.fulfilled, (state) => {
         state.loading = "succeeded";
         // state.newList.push(action.payload);
       })
-      .addCase(createNewList.rejected, (state, action) => {
+      .addCase(createNewGroupList.rejected, (state, action) => {
         state.loading = "failed";
         state.error = action.error?.message; // action.error kontrolü ekleyin
       });
@@ -85,4 +86,4 @@ export const providerSlice = createSlice({
   },
 });
 
-export const { getBoardId } = providerSlice.actions;
+export const { getGroupBoardId } = providerGroupSlice.actions;

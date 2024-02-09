@@ -21,12 +21,14 @@ export const addGroupBoard = createAsyncThunk(
   async (data, { getState }) => {
     const state = getState();
     try {
-      const groupBoardCollection = collection(db, "group-board");
+      const groupBoardCollection = collection(db, "group-boards");
       const groupDoc = await addDoc(groupBoardCollection, data);
       const seletGroupDoc = doc(groupBoardCollection, groupDoc.id);
       const updateGroupDoc = await updateDoc(seletGroupDoc, {
         id: groupDoc.id,
+        created: state.addNewGroupBoard.authentication,
       });
+
       return updateGroupDoc;
     } catch (error) {
       console.log("ERROR", error);

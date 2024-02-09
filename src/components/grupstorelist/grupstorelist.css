@@ -6,7 +6,7 @@
 .item-container {
     padding: 6px 12px;
     border-radius: 8px;
-    background-color: rgb(255, 176, 189);
+
     row-gap: 8px;
     display: flex;
     justify-content: space-between;
@@ -14,14 +14,14 @@
 }
 
 .store-container {
-    background-color: rgb(255, 127, 148);
+
     font-weight: 600;
     padding: 6px 12px;
     border-radius: 8px 8px 0px 0px;
 }
 
 .items-container {
-    background-color: rgb(255, 152, 169);
+
     padding: 6px;
     border-radius: 0px 0px 8px 8px;
     display: flex;
@@ -39,13 +39,11 @@
 .new-card {
     padding: 6px 12px;
     border-radius: 8px;
-    background-color: rgb(255, 176, 189);
+
     row-gap: 8px;
 }
 
-.new-card:hover {
-    background-color: rgb(255, 204, 213);
-}
+.new-card:hover {}
 
 .item-container:hover {
     background-color: rgb(255, 126, 150);
