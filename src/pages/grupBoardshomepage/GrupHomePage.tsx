@@ -20,15 +20,14 @@ import { deleteDoc, getDoc, query } from "firebase/firestore";
 import { useParams } from "react-router-dom";
 import CreateGroupListModal from "../../components/gruplistmodal/CreateGroupListModal";
 import GrupStoreList from "../../components/grupstorelist/GrupStoreList";
-type IDATA = IGroup[];
 
 const GrupHomePage: React.FC = () => {
   const [openModal, setOpenModal] = useState(false);
-  const [deneme, setDeneme] = useState<IDATA>([]);
-  const [boardName, setBoardName] = useState("");
+  const [deneme, setDeneme] = useState<IGroup[]>([]);
+  console.log("denemedeki veriler", deneme);
+  const [boardName, setBoardName] = useState<string>("");
   const params = useParams();
-  console.log("ZIIIIIIIIIIIIII", params);
-  const auth = useSelector((state: RootState) => state.getData.auth);
+  const auth = useSelector((state: RootState) => state.auth.userDetails);
 
   useEffect(() => {
     const getBoardName = async () => {
@@ -36,8 +35,7 @@ const GrupHomePage: React.FC = () => {
         const boardNameColection = collection(db, "group-boards");
         const selectBoardName = doc(boardNameColection, params.groupId);
         const board = await getDoc(selectBoardName);
-        console.log("boardsssssssss", board.data().name);
-        setBoardName(board.data().name);
+        setBoardName(board.data()?.name);
         return board;
       } catch (error) {
         console.log("ERROR", error);
@@ -81,7 +79,7 @@ const GrupHomePage: React.FC = () => {
 
   /********************************************************************** */
   /********************************************************************** */
-  const removeCard = (listId, index, cardId) => {
+  const removeCard = (listId: string, cardId: string) => {
     const listCollection = collection(
       db,
       "group-boards",
@@ -91,7 +89,6 @@ const GrupHomePage: React.FC = () => {
     const listRef = doc(listCollection, listId);
     console.log("listID:", listId);
     deneme.forEach(async (list) => {
-      console.log("list id:", listId, "index no:", index, "cardId:", cardId);
       if (list.id === listId) {
         await updateDoc(listRef, {
           items: list.items.filter((card) => card.id !== cardId),
@@ -100,7 +97,7 @@ const GrupHomePage: React.FC = () => {
       return list;
     });
   };
-  const removeList = async (listId) => {
+  const removeList = async (listId: string) => {
     const listCollection = collection(
       db,
       "group-boards",
@@ -192,28 +189,28 @@ const GrupHomePage: React.FC = () => {
       const destinationList = deneme.find(
         (list) => list.id === destination.droppableId
       );
-      const draggingCard = sourceList.items.filter(
+      const draggingCard = sourceList?.items.filter(
         (card) => card.id === draggableId
       )[0];
-      console.log(sourceList, destinationList);
+      console.log("xxxxxxxxxxxxxxx", draggingCard);
       const sourceListRef = doc(
         collection(db, "group-boards", `${params.groupId}`, "lists"),
         source.droppableId
       );
 
-      sourceList.items.splice(source.index, 1);
+      sourceList?.items.splice(source.index, 1);
       await updateDoc(sourceListRef, {
-        items: sourceList.items,
+        items: sourceList?.items,
       });
 
       const destinationListRef = doc(
         collection(db, "group-boards", `${params.groupId}`, "lists"),
         destination.droppableId
       );
-      destinationList.items.splice(destination.index, 0, draggingCard);
+      destinationList?.items.splice(destination.index, 0, draggingCard);
 
       await updateDoc(destinationListRef, {
-        items: destinationList.items,
+        items: destinationList?.items,
       });
     }
   };
@@ -241,11 +238,9 @@ const GrupHomePage: React.FC = () => {
                     >
                       <GrupStoreList
                         {...item}
-                        index={index}
                         removeCard={removeCard}
                         removeList={removeList}
                         params={params.groupId}
-                        boardName={boardName}
                       />
                     </div>
                   )}
@@ -267,7 +262,7 @@ const GrupHomePage: React.FC = () => {
                 <CreateGroupListModal
                   setOpenModal={setOpenModal}
                   openModal={openModal}
-                  params={params}
+                  params={params.groupId}
                 />
               )}
             </div>

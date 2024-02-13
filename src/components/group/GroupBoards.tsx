@@ -27,6 +27,7 @@ import "./groupBoards.css";
 
 import MemberModal from "../member modal/MemberModal";
 import RemoveMemberModal from "../removemembermodal/RemoveMemberModal";
+import { RootState } from "../../reducer/store";
 
 const customTheme: CustomFlowbiteTheme = {
   modal: {
@@ -37,7 +38,7 @@ const customTheme: CustomFlowbiteTheme = {
   },
 };
 
-function classNames(...classes) {
+function classNames(...classes: any) {
   return classes.filter(Boolean).join(" ");
 }
 const GroupBoards = () => {
@@ -49,7 +50,7 @@ const GroupBoards = () => {
 
   const [openModal, setOpenModal] = useState(false);
   const [groupBoards, setGroupBoards] = useState([]);
-  const auth = useSelector((state) => state.auth.userDetails);
+  const auth = useSelector((state: RootState) => state.auth.userDetails);
   const navigate = useNavigate();
   useEffect(() => {
     const userCardCollection = collection(db, "group-boards");
@@ -61,8 +62,9 @@ const GroupBoards = () => {
       (querySnapshot) => {
         const cities = [];
         querySnapshot.forEach((doc) => {
-          const x = doc.data().member;
-          const controlll = x && x.some((item) => item.includes(auth));
+          const member = doc.data().member;
+          const controlll =
+            member && member.some((item: string) => item.includes(auth));
 
           if (doc.data().created === auth || controlll) {
             cities.push({ id: doc.id, ...doc.data() });

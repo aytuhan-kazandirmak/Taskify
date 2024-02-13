@@ -1,4 +1,4 @@
-import { Button, Modal, Label, TextInput } from "flowbite-react";
+import { Button, Modal, TextInput } from "flowbite-react";
 import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
@@ -7,11 +7,9 @@ import { Dispatch } from "redux";
 type iProps = {
   setOpenModal: React.Dispatch<React.SetStateAction<boolean>>;
   openModal: boolean;
-  params: Iparams;
+  params: number;
 };
-type Iparams = {
-  id: string;
-};
+
 type Inputs = {
   name: string;
 };
@@ -27,7 +25,7 @@ const CreateGroupListModal: React.FC<iProps> = ({
       document.body.style.overflow = "";
     };
   }, []);
-  console.log("CREATELİSTMODAL", params.groupId);
+
   const dispatch: Dispatch = useDispatch();
 
   const {
@@ -48,10 +46,9 @@ const CreateGroupListModal: React.FC<iProps> = ({
         <Modal.Body>
           <div className="text-center">
             <form
-              onSubmit={handleSubmit((data) => {
-                dispatch(
-                  createNewGroupList({ ...data, boardId: params.groupId })
-                );
+              onSubmit={handleSubmit((data: Inputs) => {
+                console.log("dataaaaaa", data);
+                dispatch(createNewGroupList({ ...data, boardId: params }));
 
                 setOpenModal(false);
               })}

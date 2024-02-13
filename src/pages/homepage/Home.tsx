@@ -1,11 +1,24 @@
 import { collection, onSnapshot, query } from "firebase/firestore";
-import { useEffect, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { db } from "../../firebase/Firebase";
+import { RootState } from "../../reducer/store";
+type Iboard = {
+  created: string;
+  entryDateDay: number;
+  entryDateHour: number;
+  entryDateMinute: number;
+  entryDateMonth: number;
+  entryDateSecond: number;
+  entryDateYear: number;
+  id: string;
+  member: string[];
+  name: string;
+};
 
-const HomePage = () => {
-  const [lastEntries, setLastEntries] = useState([]);
-  const sortedLastEntries = lastEntries.sort((a, b) => {
+const HomePage: FC = () => {
+  const [lastEntries, setLastEntries] = useState<Iboard[]>([]);
+  const sortedLastEntries = lastEntries.sort((a: Iboard, b: Iboard) => {
     b.entryDateYear - a.entryDateYear;
     if (a.entryDateYear < b.entryDateYear) return -1;
     if (a.entryDateYear > b.entryDateYear) return 1;
@@ -25,25 +38,18 @@ const HomePage = () => {
   });
   const reversedSortedLastEntries = sortedLastEntries.reverse();
   const getFirstThreeElement = reversedSortedLastEntries.splice(0, 3);
-  console.log("AAA", getFirstThreeElement);
+  console.log("DENEM", getFirstThreeElement);
 
-  const auth = useSelector((state) => state.auth.userDetails);
+  const auth = useSelector((state: RootState) => state.auth.userDetails);
   useEffect(() => {
     const userCardCollection = collection(db, "group-boards");
-
     const q = query(userCardCollection);
-
     const unsubscribe = onSnapshot(
       q,
       (querySnapshot) => {
-        const cities = [];
+        const cities: Iboard[] = [];
         querySnapshot.forEach((doc) => {
-          const x = doc.data().member;
-          const controlll = x && x.some((item) => item.includes(auth));
-
-          if (doc.data().created === auth || controlll) {
-            cities.push({ id: doc.id, ...doc.data() });
-          }
+          cities.push({ ...doc.data() });
         });
 
         setLastEntries(cities);
@@ -61,8 +67,11 @@ const HomePage = () => {
 
   return (
     <div className="text-gray-200">
-      {getFirstThreeElement &&
-        getFirstThreeElement.map((item, i) => <div key={i}>{item.name}</div>)}
+      <div className="py-5 text-gray-200 text-xl">Son açılanlar</div>
+      <div className="flex gap-x-5">
+        {getFirstThreeElement &&
+          getFirstThreeElement.map((item, i) => <div key={i}>{item.name}</div>)}
+      </div>
     </div>
   );
 };

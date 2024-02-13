@@ -1,13 +1,13 @@
 import { createSlice } from "@reduxjs/toolkit";
 type TState = {
   loading: boolean;
-  userDetails: string | undefined;
+  userDetails: string;
   error: null;
   success: boolean;
 };
 const authInitialState: TState = {
   loading: false,
-  userDetails: undefined,
+  userDetails: "",
   error: null,
   success: false,
 };
@@ -20,7 +20,7 @@ export const authSlice = createSlice({
       state.userDetails = actions.payload;
     },
     logout(state) {
-      state.userDetails = undefined;
+      state.userDetails = "";
     },
   },
 });

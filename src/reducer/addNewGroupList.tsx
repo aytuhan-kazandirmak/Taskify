@@ -13,6 +13,7 @@ interface UsersState {
 interface Idata {
   name: string;
   parentId: string; // parentId tipi belirtildi
+  boardId: string;
 }
 
 const initialCardState: UsersState = {
@@ -47,7 +48,7 @@ export const addNewGroupCard = createAsyncThunk<
     const newData = {
       ...data,
       id: `${str}`,
-      createdBy: state.addCard.authentication || "", // null ya da undefined durumlarına karşı kontrol ekledim
+      createdBy: state.auth.userDetails || "", // null ya da undefined durumlarına karşı kontrol ekledim
     };
     const updateCardList = await updateDoc(selectList, {
       items: arrayUnion(newData),

@@ -7,26 +7,30 @@ import { AiFillDelete } from "react-icons/ai";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { useDispatch } from "react-redux";
 import { addNewGroupCard } from "../../reducer/addNewGroupList";
-import { IGroup, IItem } from "../kanban/commonTypes";
+import { IItem } from "../kanban/commonTypes";
 import "./grupstorelist.css";
-import { collection, doc, getDoc } from "firebase/firestore";
-import { db } from "../../firebase/Firebase";
+
 type Inputs = {
   name: string;
 };
-interface StoreListProps extends IGroup {}
+interface StoreListProps {
+  name: string;
+  items: IItem[];
+  id: string;
+  removeCard: (listId: string, cardId: string) => void;
+
+  removeList: (listId: string) => Promise<void>;
+  params?: string;
+}
 const GrupStoreList: React.FC<StoreListProps> = ({
   name,
   items,
   id,
-  index,
   removeCard,
   removeList,
   params,
-  boardName,
 }) => {
   // const newItems = items.sort((a, b) => a.position - b.position);
-
   const dispatch = useDispatch();
 
   const {
@@ -90,7 +94,7 @@ const GrupStoreList: React.FC<StoreListProps> = ({
                         <h4 className="w-5/6">{item.name}</h4>
                         <div
                           onClick={() => {
-                            removeCard(id, index, item.id);
+                            removeCard(id, item.id);
                           }}
                           className="p-2 cursor-pointer text-center flex items-center"
                         >
