@@ -3,6 +3,7 @@ import { FC, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { db } from "../../firebase/Firebase";
 import { RootState } from "../../reducer/store";
+import { useNavigate } from "react-router-dom";
 type Iboard = {
   created: string;
   entryDateDay: number;
@@ -39,7 +40,7 @@ const HomePage: FC = () => {
   const reversedSortedLastEntries = sortedLastEntries.reverse();
   const getFirstThreeElement = reversedSortedLastEntries.splice(0, 3);
   console.log("DENEM", getFirstThreeElement);
-
+  const navigate = useNavigate();
   const auth = useSelector((state: RootState) => state.auth.userDetails);
   useEffect(() => {
     const userCardCollection = collection(db, "group-boards");
@@ -49,7 +50,7 @@ const HomePage: FC = () => {
       (querySnapshot) => {
         const cities: Iboard[] = [];
         querySnapshot.forEach((doc) => {
-          cities.push({ ...doc.data() });
+          cities.push({ ...(doc.data() as Iboard) });
         });
 
         setLastEntries(cities);
@@ -67,10 +68,26 @@ const HomePage: FC = () => {
 
   return (
     <div className="text-gray-200">
-      <div className="py-5 text-gray-200 text-xl">Son açılanlar</div>
+      <div className="py-5 text-gray-200 text-xl">Sık Kullanılanlar</div>
       <div className="flex gap-x-5">
         {getFirstThreeElement &&
-          getFirstThreeElement.map((item, i) => <div key={i}>{item.name}</div>)}
+          getFirstThreeElement.map((item, i) => (
+            <div
+              key={i}
+              className="w-[272px] h-[178px] bg-zinc-800  flex rounded-lg text-slate-200  ease-linear duration-75"
+            >
+              <div
+                onClick={() => {
+                  navigate(`/groupboard/${item.id}`);
+
+                  console.log("BOARD İD", item.id);
+                }}
+                className="board flex justify-center p-8 items-center h-full w-[85%] cursor-pointer rounded-lg break-all"
+              >
+                {item.name}
+              </div>
+            </div>
+          ))}
       </div>
     </div>
   );

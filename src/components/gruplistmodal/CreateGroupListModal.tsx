@@ -7,11 +7,15 @@ import { Dispatch } from "redux";
 type iProps = {
   setOpenModal: React.Dispatch<React.SetStateAction<boolean>>;
   openModal: boolean;
-  params: number;
+  params?: string;
 };
 
 type Inputs = {
   name: string;
+};
+type Inputs2 = {
+  name: string;
+  boardId: string;
 };
 
 const CreateGroupListModal: React.FC<iProps> = ({
@@ -48,7 +52,12 @@ const CreateGroupListModal: React.FC<iProps> = ({
             <form
               onSubmit={handleSubmit((data: Inputs) => {
                 console.log("dataaaaaa", data);
-                dispatch(createNewGroupList({ ...data, boardId: params }));
+                dispatch(
+                  createNewGroupList({
+                    name: data.name,
+                    boardId: params,
+                  } as Inputs2)
+                );
 
                 setOpenModal(false);
               })}
@@ -69,7 +78,9 @@ const CreateGroupListModal: React.FC<iProps> = ({
                   autoFocus
                   placeholder="Liste başlığı girin..."
                 />
-                {errors.name && <span>This field is required</span>}
+                {errors.name && (
+                  <span className="text-white">Bu alan gerekli</span>
+                )}
               </div>
               <Button type="submit" className="bg-[#2e2e2e] hover:bg-zinc-900 ">
                 Listeye Ekle

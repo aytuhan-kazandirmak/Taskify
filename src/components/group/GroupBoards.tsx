@@ -5,7 +5,7 @@ import {
   Modal,
   TextInput,
 } from "flowbite-react";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import { addGroupBoard } from "../../reducer/addNewGroupSlice";
@@ -25,10 +25,27 @@ import { Menu, Transition } from "@headlessui/react";
 import { Fragment } from "react";
 import "./groupBoards.css";
 
-import MemberModal from "../member modal/MemberModal";
 import RemoveMemberModal from "../removemembermodal/RemoveMemberModal";
 import { RootState } from "../../reducer/store";
+import DetailsModal from "../boarddetails/DetailsModal";
+import MemberModal from "../memberModal/MemberModal";
 
+export type IBoard = {
+  created: string;
+  entryDateDay?: number;
+  entryDateHour?: number;
+  entryDateMinute?: number;
+  entryDateMonth?: number;
+  entryDateSecond?: number;
+  entryDateYear?: number;
+  id: string;
+  member?: string[];
+  name: string;
+};
+export type IDetails = {
+  name: string;
+  created: string;
+};
 const customTheme: CustomFlowbiteTheme = {
   modal: {
     content: {
@@ -41,15 +58,15 @@ const customTheme: CustomFlowbiteTheme = {
 function classNames(...classes: any) {
   return classes.filter(Boolean).join(" ");
 }
-const GroupBoards = () => {
-  const [addMember, setAddMember] = useState(false);
-  const [memberEmail, setMemberEmail] = useState("");
-  const [currentBoardId, setCurrentBoardId] = useState("");
-  const [modalRemove, setModalRemove] = useState(false);
-  const [removeMemberBoardId, setRemoveMemberBoardId] = useState("");
-
-  const [openModal, setOpenModal] = useState(false);
-  const [groupBoards, setGroupBoards] = useState([]);
+const GroupBoards: React.FC = () => {
+  const [addMember, setAddMember] = useState<boolean>(false);
+  const [currentBoardId, setCurrentBoardId] = useState<string>("");
+  const [modalRemove, setModalRemove] = useState<boolean>(false);
+  const [removeMemberBoardId, setRemoveMemberBoardId] = useState<string>("");
+  const [openDetailsModal, setOpenDetailsModal] = useState<boolean>(false);
+  const [detailsModal, setDetailsModal] = useState<IDetails[]>([]);
+  const [openModal, setOpenModal] = useState<boolean>(false);
+  const [groupBoards, setGroupBoards] = useState<IBoard[]>([]);
   const auth = useSelector((state: RootState) => state.auth.userDetails);
   const navigate = useNavigate();
   useEffect(() => {
@@ -60,18 +77,17 @@ const GroupBoards = () => {
     const unsubscribe = onSnapshot(
       q,
       (querySnapshot) => {
-        const cities = [];
+        const cities: IBoard[] = [];
         querySnapshot.forEach((doc) => {
           const member = doc.data().member;
           const controlll =
             member && member.some((item: string) => item.includes(auth));
 
           if (doc.data().created === auth || controlll) {
-            cities.push({ id: doc.id, ...doc.data() });
+            cities.push({ id: doc.id, ...doc.data() } as IBoard);
           }
         });
         setGroupBoards(cities);
-        console.log("BOARDLAR", cities);
       },
       (error) => {
         console.log(error);
@@ -82,7 +98,7 @@ const GroupBoards = () => {
       unsubscribe();
     };
   }, [auth]);
-  const updateClickDate = async (boardId) => {
+  const updateClickDate = async (boardId: string) => {
     try {
       const updateDateCollection = collection(db, "group-boards");
       const date = new Date();
@@ -102,7 +118,7 @@ const GroupBoards = () => {
     }
   };
 
-  const removeBoard = async (boardId) => {
+  const removeBoard = async (boardId: string) => {
     const listCollection = collection(db, "group-boards");
     const listRef = doc(listCollection, boardId);
     await deleteDoc(listRef);
@@ -124,7 +140,6 @@ const GroupBoards = () => {
         <RemoveMemberModal
           groupBoards={groupBoards}
           removeMemberBoardId={removeMemberBoardId}
-          setMemberEmail={setMemberEmail}
           setModalRemove={setModalRemove}
           modalRemove={modalRemove}
         />
@@ -179,7 +194,6 @@ const GroupBoards = () => {
                                 onClick={() => {
                                   setAddMember(true);
                                   setCurrentBoardId(board.id);
-                                  console.log("board iddddddd", board.id);
                                 }}
                                 className={classNames(
                                   active
@@ -232,6 +246,29 @@ const GroupBoards = () => {
                               )}
                             </Menu.Item>
                           )}
+
+                          <Menu.Item>
+                            {({ active }) => (
+                              <span
+                                onClick={() => {
+                                  setOpenDetailsModal(true);
+                                  console.log("ayrıntılıar", board);
+                                  setDetailsModal({
+                                    name: board.name,
+                                    created: board.created,
+                                  });
+                                }}
+                                className={classNames(
+                                  active
+                                    ? "bg-zinc-500 font-medium"
+                                    : "text-zinc-300",
+                                  "block px-4 py-2 text-sm cursor-pointer font-medium"
+                                )}
+                              >
+                                Ayrıntılar
+                              </span>
+                            )}
+                          </Menu.Item>
                         </div>
                       </Menu.Items>
                     </Transition>
@@ -244,6 +281,13 @@ const GroupBoards = () => {
                   board={board}
                   setAddMember={setAddMember}
                   addMember={addMember}
+                />
+              )}
+              {openDetailsModal && (
+                <DetailsModal
+                  detailsModal={detailsModal}
+                  setOpenDetailsModal={setOpenDetailsModal}
+                  openDetailsModal={openDetailsModal}
                 />
               )}
             </div>
@@ -260,8 +304,8 @@ const GroupBoards = () => {
           <Modal.Body>
             <form
               onSubmit={handleSubmit((data) => {
-                dispatch(addGroupBoard(data));
                 setOpenModal(false);
+                dispatch(addGroupBoard(data));
               })}
               className="text-center"
             >
@@ -275,10 +319,10 @@ const GroupBoards = () => {
                 }}
                 {...register("name", { required: true })}
                 id="email"
-                placeholder="Bir grup panosu oluşturun"
+                placeholder="Bir pano oluşturun"
                 required
               />
-              {errors.name && <span>This field is required</span>}
+              {errors.name && <span>Bu alan gerekli...</span>}
               <div className="flex justify-center gap-4 mt-5">
                 <Button
                   className="bg-[#2e2e2e] hover:bg-zinc-900 "

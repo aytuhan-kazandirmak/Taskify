@@ -13,6 +13,7 @@ import "./grupstorelist.css";
 type Inputs = {
   name: string;
 };
+
 interface StoreListProps {
   name: string;
   items: IItem[];
@@ -56,13 +57,14 @@ const GrupStoreList: React.FC<StoreListProps> = ({
     setCreateCard(false);
   };
 
-  const handleAddCard: SubmitHandler<Inputs> = (data) => {
-    console.log("DATAAAAAAAAAAAAAAAAAA", {
-      ...data,
-      parentId: params,
-      boardId: params,
-    });
-    dispatch(addNewGroupCard({ ...data, parentId: id, boardId: params }));
+  const handleAddCard: SubmitHandler<Inputs> = async (data) => {
+    dispatch(
+      addNewGroupCard({
+        name: data.name,
+        parentId: id,
+        boardId: params,
+      })
+    );
   };
 
   return (
@@ -117,7 +119,9 @@ const GrupStoreList: React.FC<StoreListProps> = ({
                     rows={2}
                     placeholder="Bu kart için başlık girin..."
                   ></Textarea>
-                  {errors.name && <span>This field is required</span>}
+                  {errors.name && (
+                    <span className="text-white">Bu alan gerekli</span>
+                  )}
                 </div>
                 <div className="flex justify-start gap-4">
                   <Button

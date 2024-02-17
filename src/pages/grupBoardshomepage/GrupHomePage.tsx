@@ -21,12 +21,17 @@ import { useParams } from "react-router-dom";
 import CreateGroupListModal from "../../components/gruplistmodal/CreateGroupListModal";
 import GrupStoreList from "../../components/grupstorelist/GrupStoreList";
 
+type Iparams = {
+  groupId?: string;
+};
+
 const GrupHomePage: React.FC = () => {
   const [openModal, setOpenModal] = useState(false);
   const [deneme, setDeneme] = useState<IGroup[]>([]);
   console.log("denemedeki veriler", deneme);
   const [boardName, setBoardName] = useState<string>("");
-  const params = useParams();
+  const params: Iparams = useParams();
+  console.log("akakakakakak", params);
   const auth = useSelector((state: RootState) => state.auth.userDetails);
 
   useEffect(() => {
@@ -58,7 +63,7 @@ const GrupHomePage: React.FC = () => {
       (querySnapshot) => {
         const cities: IGroup[] = [];
         querySnapshot.forEach((doc) => {
-          cities.push({ id: doc.id, ...doc.data() });
+          cities.push({ id: doc.id, ...doc.data() } as IGroup);
         });
 
         const sortedData = cities.sort(
@@ -207,7 +212,9 @@ const GrupHomePage: React.FC = () => {
         collection(db, "group-boards", `${params.groupId}`, "lists"),
         destination.droppableId
       );
-      destinationList?.items.splice(destination.index, 0, draggingCard);
+      if (draggingCard !== undefined) {
+        destinationList?.items.splice(destination.index, 0, draggingCard);
+      }
 
       await updateDoc(destinationListRef, {
         items: destinationList?.items,

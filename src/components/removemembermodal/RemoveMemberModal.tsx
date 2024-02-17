@@ -1,16 +1,26 @@
 import { collection, doc, updateDoc } from "firebase/firestore";
 import { Button, Modal, TextInput } from "flowbite-react";
-import { useEffect } from "react";
+import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { db } from "../../firebase/Firebase";
-function RemoveMemberModal({
-  setMemberEmail,
+import { IBoard } from "../group/GroupBoards";
+type IProps = {
+  setModalRemove: React.Dispatch<React.SetStateAction<boolean>>;
+  modalRemove: boolean;
+  removeMemberBoardId: string;
+  groupBoards: IBoard[];
+};
+
+const RemoveMemberModal: React.FC<IProps> = ({
   setModalRemove,
   modalRemove,
   removeMemberBoardId,
   groupBoards,
-}) {
-  const removeMember = (data) => {
+}) => {
+  const removeMember: (data: string) => Promise<void>[] | undefined = (
+    data
+  ) => {
+    console.log("silinecek üyü bilgileri", data);
     try {
       const removeMemberCollection = collection(db, "group-boards");
       const selectRemoveMemberModal = doc(
@@ -21,7 +31,7 @@ function RemoveMemberModal({
         console.log("ELEMANLAR", items);
         if (items.id === removeMemberBoardId) {
           const members = items.member;
-          const newMembers = members.filter((member) => member !== data.email);
+          const newMembers = members?.filter((member) => member !== data);
           console.log("üye silindi kalan üyeler", newMembers);
           const updateFirebaseMembers = await updateDoc(
             selectRemoveMemberModal,
@@ -61,8 +71,7 @@ function RemoveMemberModal({
           <form
             className="text-center"
             onSubmit={handleSubmit((data) => {
-              removeMember(data);
-              setMemberEmail(data.email);
+              removeMember(data.email);
               setModalRemove(false);
             })}
           >
@@ -79,7 +88,9 @@ function RemoveMemberModal({
               placeholder="Silinecek üyenin email adresini giriniz"
               required
             />
-            {errors.email && <span>This field is required</span>}
+            {errors.email && (
+              <span className="text-white">Bu alan gerekli</span>
+            )}
             <div className="flex justify-center gap-4 mt-5">
               <Button type="submit" className="bg-[#2e2e2e] hover:bg-zinc-900">
                 {"Yes, I'm sure"}
@@ -93,5 +104,5 @@ function RemoveMemberModal({
       </Modal>
     </>
   );
-}
+};
 export default RemoveMemberModal;

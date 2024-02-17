@@ -1,8 +1,9 @@
 import { PiChalkboardSimpleFill } from "react-icons/pi";
-import { IoLogOutOutline } from "react-icons/io5";
+import { RiLogoutBoxRFill } from "react-icons/ri";
 import { logout } from "../../reducer/firebaseSlice";
 import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
+import { FaStar } from "react-icons/fa";
 import "./sidebar.css";
 
 function SideBar() {
@@ -16,15 +17,19 @@ function SideBar() {
       </div>
 
       <div className="flex flex-col gap-y-6">
-        <Link className="pl-5" to={"/"}>
-          <div>Kendi Panolarım</div>
+        <Link
+          className="w-full flex flex-row gap-x-2 items-center pl-5"
+          to={"/"}
+        >
+          <FaStar size={22} />
+          <div>Sık Kullanılanlar</div>
         </Link>
         <Link
           className="w-full flex flex-row gap-x-2 items-center pl-5"
           to={"/groupboard"}
         >
           <PiChalkboardSimpleFill size={22} />
-          <div>Grup Panoları</div>
+          <div>Panolar</div>
         </Link>
         <Link
           className="w-full flex flex-row gap-x-2 items-center pl-5"
@@ -33,8 +38,8 @@ function SideBar() {
           }}
           to={"/login"}
         >
-          <IoLogOutOutline size={22} />
-          <div>Logout</div>
+          <RiLogoutBoxRFill size={23} />
+          <div>Çıkış</div>
         </Link>
       </div>
     </div>

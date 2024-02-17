@@ -10,7 +10,7 @@ interface UsersState {
   authentication: string | undefined;
 }
 
-interface Idata {
+export interface Idata {
   name: string;
   parentId: string; // parentId tipi belirtildi
   boardId: string;
@@ -28,12 +28,11 @@ export const addNewGroupCard = createAsyncThunk<
   { state: RootState }
 >("post/addCard", async (data, { getState }) => {
   const state = getState();
-  console.log("ZAMAZİNGOOOOOOOOOOOO", data);
   try {
     const userAddCardCollection = collection(
       db,
       "group-boards",
-      data.boardId, // null ya da undefined durumlarına karşı kontrol ekledim
+      data.boardId,
       "lists"
     );
 
@@ -85,5 +84,3 @@ export const addGroupListSlice = createSlice({
       });
   },
 });
-
-export const {} = addGroupListSlice.actions;

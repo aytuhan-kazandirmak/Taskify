@@ -1,4 +1,4 @@
-import { Button, Checkbox, Label, TextInput } from "flowbite-react";
+import { Button, Label, TextInput } from "flowbite-react";
 import { signInWithEmailAndPassword, auth } from "../../firebase/Firebase";
 import { useForm } from "react-hook-form";
 import { useEffect } from "react";
@@ -58,11 +58,7 @@ const Login = () => {
       >
         <div>
           <div className="mb-2 block">
-            <Label
-              className="text-slate-200"
-              htmlFor="email1"
-              value="Your email"
-            />
+            <Label className="text-slate-200" htmlFor="email1" value="Email" />
           </div>
           <TextInput
             {...register("email")}
@@ -76,7 +72,7 @@ const Login = () => {
             <Label
               className="text-slate-200"
               htmlFor="password1"
-              value="Your password"
+              value="Şifre"
             />
           </div>
           <TextInput
@@ -85,18 +81,15 @@ const Login = () => {
             type="password"
             placeholder="********"
           />
-          {errors.password && <span>This field is required</span>}
+          {errors.password && (
+            <span className="text-white">Bu alan gerekli...</span>
+          )}
         </div>
-        <div className="flex items-center gap-2">
-          <Checkbox id="remember" />
-          <Label className="text-slate-200" htmlFor="remember">
-            Remember me
-          </Label>
-        </div>
-        <Button type="submit">Submit</Button>
+        <div className="flex items-center gap-2"></div>
+        <Button type="submit">Giriş yap</Button>
 
         <Link to={"/signup"}>
-          <Button className="w-full">Register</Button>
+          <Button className="w-full">Kayıt ol</Button>
         </Link>
       </form>
     </div>

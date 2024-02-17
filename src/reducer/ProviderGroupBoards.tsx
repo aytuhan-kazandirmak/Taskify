@@ -5,6 +5,7 @@ import { login, logout } from "./firebaseSlice";
 
 type Inputs = {
   name: string;
+  boardId: string;
 };
 
 interface UsersState {
@@ -27,7 +28,7 @@ export const createNewGroupList = createAsyncThunk<
   { state: RootState }
 >("posts/fetchGroupPosts", async (data, { getState }) => {
   const state = getState();
-  console.log("AKAAAAAAAAAAAAAA", data);
+  console.log("ASD ASD ASD ASD ASD ", data);
   try {
     const userAddCardCollection = collection(
       db,
@@ -35,8 +36,6 @@ export const createNewGroupList = createAsyncThunk<
       data.boardId,
       "lists"
     );
-
-    console.log("STATE BOARD NAME", data.boardId.id);
     const docRef = await addDoc(userAddCardCollection, data);
 
     const selecetedData = doc(userAddCardCollection, docRef.id);

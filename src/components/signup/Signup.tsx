@@ -55,11 +55,7 @@ const Signup = () => {
       >
         <div>
           <div className="mb-2 block">
-            <Label
-              className="text-slate-200"
-              htmlFor="email2"
-              value="Your Fullname"
-            />
+            <Label className="text-slate-200" htmlFor="email2" value="İsim" />
           </div>
           <TextInput
             {...register("fullname")}
@@ -72,11 +68,7 @@ const Signup = () => {
         </div>
         <div>
           <div className="mb-2 block">
-            <Label
-              className="text-slate-200"
-              htmlFor="email2"
-              value="Your email"
-            />
+            <Label className="text-slate-200" htmlFor="email2" value="Email" />
           </div>
           <TextInput
             {...register("email")}
@@ -92,7 +84,7 @@ const Signup = () => {
             <Label
               className="text-slate-200"
               htmlFor="password2"
-              value="Your password"
+              value="Şifre"
             />
           </div>
           <TextInput
@@ -102,14 +94,16 @@ const Signup = () => {
             required
             shadow
           />
-          {errors.password2 && <span>This field is required</span>}
+          {errors.password2 && (
+            <span className="text-white">Bu alan gerekli</span>
+          )}
         </div>
         <div>
           <div className="mb-2 block">
             <Label
               className="text-slate-200"
               htmlFor="repeat-password"
-              value="Repeat password"
+              value="Şifrenizi tekrar giriniz"
             />
           </div>
           <TextInput
@@ -132,7 +126,7 @@ const Signup = () => {
             </a>
           </Label>
         </div>
-        <Button type="submit">Register new account</Button>
+        <Button type="submit">Kayıt ol</Button>
       </form>
     </div>
   );
