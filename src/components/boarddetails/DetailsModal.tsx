@@ -3,7 +3,7 @@ import { IDetails } from "../group/GroupBoards";
 type IProps = {
   setOpenDetailsModal: React.Dispatch<React.SetStateAction<boolean>>;
   openDetailsModal: boolean;
-  detailsModal: IDetails;
+  detailsModal: IDetails | undefined;
 };
 const DetailsModal: React.FC<IProps> = ({
   setOpenDetailsModal,
@@ -16,10 +16,10 @@ const DetailsModal: React.FC<IProps> = ({
         <Modal.Body>
           <div className="space-y-6 pt-12">
             <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400">
-              Pano: {detailsModal.name}
+              Pano: {detailsModal?.name}
             </p>
             <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400">
-              Pano Sahibi: {detailsModal.created}
+              Pano Sahibi: {detailsModal?.created}
             </p>
           </div>
         </Modal.Body>

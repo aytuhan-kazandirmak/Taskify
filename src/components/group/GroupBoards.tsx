@@ -64,7 +64,7 @@ const GroupBoards: React.FC = () => {
   const [modalRemove, setModalRemove] = useState<boolean>(false);
   const [removeMemberBoardId, setRemoveMemberBoardId] = useState<string>("");
   const [openDetailsModal, setOpenDetailsModal] = useState<boolean>(false);
-  const [detailsModal, setDetailsModal] = useState<IDetails[]>([]);
+  const [detailsModal, setDetailsModal] = useState<IDetails | undefined>();
   const [openModal, setOpenModal] = useState<boolean>(false);
   const [groupBoards, setGroupBoards] = useState<IBoard[]>([]);
   const auth = useSelector((state: RootState) => state.auth.userDetails);
@@ -153,7 +153,7 @@ const GroupBoards: React.FC = () => {
           <GoPlus size={22} />
         </button>
         {groupBoards &&
-          groupBoards.map((board, index) => (
+          groupBoards.map((board: IBoard, index) => (
             <div
               key={index}
               className="w-[272px] h-[178px] bg-zinc-800  flex rounded-lg text-slate-200  ease-linear duration-75"

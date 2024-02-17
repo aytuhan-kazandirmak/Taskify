@@ -50,7 +50,12 @@ const HomePage: FC = () => {
       (querySnapshot) => {
         const cities: Iboard[] = [];
         querySnapshot.forEach((doc) => {
-          cities.push({ ...(doc.data() as Iboard) });
+          const member = doc.data().member;
+          const controlll =
+            member && member.some((item: string) => item.includes(auth));
+          if (doc.data().created === auth || controlll) {
+            cities.push({ ...(doc.data() as Iboard) });
+          }
         });
 
         setLastEntries(cities);

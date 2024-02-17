@@ -1,10 +1,11 @@
 import { Button, Modal, TextInput } from "flowbite-react";
-import { useEffect } from "react";
+import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { addNewMember } from "../../reducer/addNewBoard";
 import { useDispatch } from "react-redux";
 import { Flowbite } from "flowbite-react";
 import type { CustomFlowbiteTheme } from "flowbite-react";
+import { IBoard } from "../group/GroupBoards";
 const customTheme: CustomFlowbiteTheme = {
   modal: {
     content: {
@@ -13,7 +14,19 @@ const customTheme: CustomFlowbiteTheme = {
     },
   },
 };
-function MemberModal({ setAddMember, addMember, board, currentBoardId }) {
+type IMemberModalProps = {
+  setAddMember: React.Dispatch<React.SetStateAction<boolean>>;
+  addMember: boolean;
+  board: IBoard;
+  currentBoardId: string;
+};
+
+const MemberModal: React.FC<IMemberModalProps> = ({
+  setAddMember,
+  addMember,
+  board,
+  currentBoardId,
+}) => {
   const dispatch = useDispatch();
   console.log("BOAAAAAAAAAAAAARD", board);
   const {
@@ -71,5 +84,5 @@ function MemberModal({ setAddMember, addMember, board, currentBoardId }) {
       </Modal>
     </Flowbite>
   );
-}
+};
 export default MemberModal;
