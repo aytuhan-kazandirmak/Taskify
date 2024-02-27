@@ -1,22 +1,23 @@
 import { useSelector } from "react-redux";
 import { RootState } from "../reducer/store";
-import { Navigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 import { Outlet } from "react-router-dom";
+import { useEffect } from "react";
 
 const PrivateRouteComponent = () => {
   const userDetails = useSelector((state: RootState) => state.auth.userDetails);
   const emailItem: string | null = localStorage.getItem("email");
-
+  const navigate = useNavigate();
   if (emailItem !== null) {
     JSON.parse(emailItem);
   }
 
-  window.onload = function () {
+  useEffect(() => {
     if (!userDetails && !emailItem) {
-      return <Navigate to="/login" replace />;
+      navigate("/login");
     }
-  };
+  }, []);
 
   return <Outlet />;
 };
