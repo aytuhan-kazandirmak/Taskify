@@ -3,7 +3,6 @@ import { RootState } from "../reducer/store";
 import { Navigate } from "react-router-dom";
 
 import { Outlet } from "react-router-dom";
-import { useEffect } from "react";
 
 const PrivateRouteComponent = () => {
   const userDetails = useSelector((state: RootState) => state.auth.userDetails);
@@ -13,11 +12,11 @@ const PrivateRouteComponent = () => {
     JSON.parse(emailItem);
   }
 
-  useEffect(() => {
+  window.onload = function () {
     if (!userDetails && !emailItem) {
-      <Navigate to="/login" replace />;
+      return <Navigate to="/login" replace />;
     }
-  }, []);
+  };
 
   return <Outlet />;
 };
