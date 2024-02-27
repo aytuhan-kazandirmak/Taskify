@@ -46,7 +46,7 @@ const CreateGroupListModal: React.FC<iProps> = ({
         <Modal.Body>
           <div className="text-center">
             <form
-              onSubmit={handleSubmit((data: Inputs) => {
+              onSubmit={handleSubmit((data) => {
                 console.log("dataaaaaa", data);
                 dispatch(
                   createNewGroupList({
