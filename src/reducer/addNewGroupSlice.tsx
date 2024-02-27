@@ -10,7 +10,7 @@ type IAddNewGroupBoardInitialState = {
   status2: "idle" | "loading" | "succeeded" | "failed";
 };
 export type Idata = {
-  name: string;
+  name?: string;
 };
 const addNewGroupBoardInitialState: IAddNewGroupBoardInitialState = {
   boardName: "",

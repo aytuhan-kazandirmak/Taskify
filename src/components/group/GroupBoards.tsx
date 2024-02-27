@@ -26,7 +26,7 @@ import { Fragment } from "react";
 import "./groupBoards.css";
 
 import RemoveMemberModal from "../removemembermodal/RemoveMemberModal";
-import { RootState } from "../../reducer/store";
+import { AppDispatch, RootState } from "../../reducer/store";
 import DetailsModal from "../boarddetails/DetailsModal";
 import MemberModal from "../memberModal/MemberModal";
 
@@ -123,7 +123,7 @@ const GroupBoards: React.FC = () => {
     const listRef = doc(listCollection, boardId);
     await deleteDoc(listRef);
   };
-  const dispatch = useDispatch();
+  const dispatch: AppDispatch = useDispatch();
   const {
     reset,
     register,
