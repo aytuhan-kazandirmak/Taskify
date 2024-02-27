@@ -3,7 +3,7 @@ import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
 import { createNewGroupList } from "../../reducer/ProviderGroupBoards";
-import { Dispatch } from "redux";
+import { AppDispatch } from "../../reducer/store";
 type iProps = {
   setOpenModal: React.Dispatch<React.SetStateAction<boolean>>;
   openModal: boolean;
@@ -11,11 +11,7 @@ type iProps = {
 };
 
 type Inputs = {
-  name: string;
-};
-type Inputs2 = {
-  name: string;
-  boardId: string;
+  name?: string;
 };
 
 const CreateGroupListModal: React.FC<iProps> = ({
@@ -30,7 +26,7 @@ const CreateGroupListModal: React.FC<iProps> = ({
     };
   }, []);
 
-  const dispatch: Dispatch = useDispatch();
+  const dispatch: AppDispatch = useDispatch();
 
   const {
     register,
@@ -56,7 +52,7 @@ const CreateGroupListModal: React.FC<iProps> = ({
                   createNewGroupList({
                     name: data.name,
                     boardId: params,
-                  } as Inputs2)
+                  })
                 );
 
                 setOpenModal(false);

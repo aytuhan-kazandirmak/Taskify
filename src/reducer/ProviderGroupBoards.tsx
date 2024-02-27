@@ -4,8 +4,8 @@ import { RootState } from "./store";
 import { login, logout } from "./firebaseSlice";
 
 type Inputs = {
-  name: string;
-  boardId: string;
+  name?: string;
+  boardId?: string;
 };
 
 interface UsersState {
@@ -33,7 +33,7 @@ export const createNewGroupList = createAsyncThunk<
     const userAddCardCollection = collection(
       db,
       "group-boards",
-      data.boardId,
+      data.boardId || "",
       "lists"
     );
     const docRef = await addDoc(userAddCardCollection, data);
