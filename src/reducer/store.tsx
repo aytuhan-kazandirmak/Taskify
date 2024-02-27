@@ -1,6 +1,5 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { authSlice } from "./firebaseSlice";
-
 import { createBoardSlice } from "./addNewBoard";
 import { providerGroupSlice } from "./ProviderGroupBoards";
 import { addGroupListSlice } from "./addNewGroupList";
@@ -15,4 +14,5 @@ const store = configureStore({
   },
 });
 export type RootState = ReturnType<typeof store.getState>;
+
 export default store;

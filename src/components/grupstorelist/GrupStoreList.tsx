@@ -32,7 +32,6 @@ const GrupStoreList: React.FC<StoreListProps> = ({
   params,
 }) => {
   // const newItems = items.sort((a, b) => a.position - b.position);
-  const dispatch = useDispatch();
 
   const {
     reset,
@@ -57,7 +56,8 @@ const GrupStoreList: React.FC<StoreListProps> = ({
     setCreateCard(false);
   };
 
-  const handleAddCard: SubmitHandler<Inputs> = async (data) => {
+  const dispatch = useDispatch();
+  const handleAddCard: SubmitHandler<Inputs> = (data) => {
     dispatch(
       addNewGroupCard({
         name: data.name,

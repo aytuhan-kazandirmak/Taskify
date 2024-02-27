@@ -28,6 +28,7 @@ export const addNewGroupCard = createAsyncThunk<
   { state: RootState }
 >("post/addCard", async (data, { getState }) => {
   const state = getState();
+
   try {
     const userAddCardCollection = collection(
       db,
@@ -52,7 +53,6 @@ export const addNewGroupCard = createAsyncThunk<
     const updateCardList = await updateDoc(selectList, {
       items: arrayUnion(newData),
     });
-    console.log("SEÇİLEN DATA", selectList);
     return updateCardList;
   } catch (error) {
     console.log("ERROR", error);

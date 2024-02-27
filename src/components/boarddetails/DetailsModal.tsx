@@ -15,10 +15,10 @@ const DetailsModal: React.FC<IProps> = ({
       <Modal dismissible show={openDetailsModal}>
         <Modal.Body>
           <div className="space-y-6 pt-12">
-            <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400">
+            <p className="text-base leading-relaxed text-white dark:text-gray-400">
               Pano: {detailsModal?.name}
             </p>
-            <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400">
+            <p className="text-base leading-relaxed text-white dark:text-gray-400">
               Pano Sahibi: {detailsModal?.created}
             </p>
           </div>
