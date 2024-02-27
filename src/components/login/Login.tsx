@@ -61,6 +61,7 @@ const Login = () => {
             <Label className="text-slate-200" htmlFor="email1" value="Email" />
           </div>
           <TextInput
+            className=""
             {...register("email")}
             id="email1"
             type="email"

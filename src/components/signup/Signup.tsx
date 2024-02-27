@@ -1,6 +1,6 @@
 import { Button, Checkbox, Label, TextInput } from "flowbite-react";
 import { useForm } from "react-hook-form";
-import "./signup.module.css";
+import "./signup.css";
 import { createUserWithEmailAndPassword, auth } from "../../firebase/Firebase";
 import { updateProfile } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
