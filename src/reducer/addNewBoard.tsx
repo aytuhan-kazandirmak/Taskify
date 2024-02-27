@@ -16,7 +16,7 @@ const createBoardInitialState: IcreateBoardInitialState = {
   authentication: "",
   status2: "idle",
 };
-type Idata = { email: string; boardId?: string };
+type Idata = { email?: string; boardId?: string };
 export const addNewMember = createAsyncThunk(
   "fetch/addMember",
   async (data: Idata) => {

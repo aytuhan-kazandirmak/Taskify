@@ -52,8 +52,10 @@ const MemberModal: React.FC<IMemberModalProps> = ({
           <form
             className="text-center"
             onSubmit={handleSubmit((data) => {
-              dispatch(addNewMember({ ...data, boardId: currentBoardId }));
-              console.log("SELAAAAAAAAAAAAAAAM", currentBoardId);
+              dispatch(
+                addNewMember({ email: data.email, boardId: currentBoardId })
+              );
+              console.log("SELAAAAAAAAAAAAAAAM", data);
               setAddMember(false);
             })}
           >
