@@ -7,10 +7,10 @@ import { useEffect } from "react";
 
 const PrivateRouteComponent = () => {
   const userDetails = useSelector((state: RootState) => state.auth.userDetails);
-  const localToken = JSON.parse(localStorage.getItem("email"));
+  const localToken: string | null = JSON.parse(localStorage.getItem("email"));
 
   useEffect(() => {
-    if (!userDetails || !localToken) {
+    if (!userDetails && !localToken) {
       return <Navigate to="/login" replace />;
     }
   }, []);
