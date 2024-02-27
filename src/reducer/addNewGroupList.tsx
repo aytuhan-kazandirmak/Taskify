@@ -11,9 +11,9 @@ interface UsersState {
 }
 
 export interface Idata {
-  name: string;
-  parentId: string; // parentId tipi belirtildi
-  boardId: string;
+  name?: string;
+  parentId?: string; // parentId tipi belirtildi
+  boardId?: string;
 }
 
 const initialCardState: UsersState = {
@@ -33,7 +33,7 @@ export const addNewGroupCard = createAsyncThunk<
     const userAddCardCollection = collection(
       db,
       "group-boards",
-      data.boardId,
+      data.boardId || "",
       "lists"
     );
 

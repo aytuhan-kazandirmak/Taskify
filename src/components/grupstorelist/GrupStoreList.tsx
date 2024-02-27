@@ -9,6 +9,7 @@ import { useDispatch } from "react-redux";
 import { addNewGroupCard } from "../../reducer/addNewGroupList";
 import { IItem } from "../kanban/commonTypes";
 import "./grupstorelist.css";
+import { AppDispatch } from "../../reducer/store";
 
 type Inputs = {
   name: string;
@@ -56,7 +57,7 @@ const GrupStoreList: React.FC<StoreListProps> = ({
     setCreateCard(false);
   };
 
-  const dispatch = useDispatch();
+  const dispatch: AppDispatch = useDispatch();
   const handleAddCard: SubmitHandler<Inputs> = (data) => {
     dispatch(
       addNewGroupCard({
