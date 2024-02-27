@@ -6,6 +6,7 @@ import { useDispatch } from "react-redux";
 import { Flowbite } from "flowbite-react";
 import type { CustomFlowbiteTheme } from "flowbite-react";
 import { IBoard } from "../group/GroupBoards";
+import { AppDispatch } from "../../reducer/store";
 const customTheme: CustomFlowbiteTheme = {
   modal: {
     content: {
@@ -27,7 +28,7 @@ const MemberModal: React.FC<IMemberModalProps> = ({
   board,
   currentBoardId,
 }) => {
-  const dispatch = useDispatch();
+  const dispatch: AppDispatch = useDispatch();
   console.log("BOAAAAAAAAAAAAARD", board);
   const {
     reset,
