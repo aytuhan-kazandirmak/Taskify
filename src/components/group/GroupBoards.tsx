@@ -102,7 +102,6 @@ const GroupBoards: React.FC = () => {
     try {
       const updateDateCollection = collection(db, "group-boards");
       const date = new Date();
-      console.log("tarih- gün", date.getDay());
       const selectupdateDateCollection = doc(updateDateCollection, boardId);
       const update = await updateDoc(selectupdateDateCollection, {
         entryDateYear: date.getFullYear(),
@@ -162,7 +161,6 @@ const GroupBoards: React.FC = () => {
                 onClick={() => {
                   navigate(`/groupboard/${board.id}`);
                   updateClickDate(board.id);
-                  console.log("BOARD İD", board.id);
                 }}
                 className="board flex justify-center p-8 items-center h-full w-[85%] cursor-pointer rounded-lg break-all"
               >
@@ -231,7 +229,6 @@ const GroupBoards: React.FC = () => {
                               {({ active }) => (
                                 <span
                                   onClick={() => {
-                                    console.log("BOOOOARD İD", board.id);
                                     removeBoard(board.id);
                                   }}
                                   className={classNames(
@@ -252,7 +249,6 @@ const GroupBoards: React.FC = () => {
                               <span
                                 onClick={() => {
                                   setOpenDetailsModal(true);
-                                  console.log("ayrıntılıar", board);
                                   setDetailsModal({
                                     name: board.name,
                                     created: board.created,

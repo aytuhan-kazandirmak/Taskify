@@ -43,7 +43,6 @@ export const addNewGroupCard = createAsyncThunk<
     for (let i = 0; i < 20; i++) {
       str += chars.charAt(Math.floor(Math.random() * chars.length));
     }
-    console.log("STR", str);
     const selectList = doc(userAddCardCollection, data.parentId);
     const newData = {
       ...data,

@@ -20,7 +20,6 @@ const RemoveMemberModal: React.FC<IProps> = ({
   const removeMember: (data: string) => Promise<void>[] | undefined = (
     data
   ) => {
-    console.log("silinecek üyü bilgileri", data);
     try {
       const removeMemberCollection = collection(db, "group-boards");
       const selectRemoveMemberModal = doc(
@@ -28,11 +27,9 @@ const RemoveMemberModal: React.FC<IProps> = ({
         removeMemberBoardId
       );
       const updateMembers = groupBoards.map(async (items) => {
-        console.log("ELEMANLAR", items);
         if (items.id === removeMemberBoardId) {
           const members = items.member;
           const newMembers = members?.filter((member) => member !== data);
-          console.log("üye silindi kalan üyeler", newMembers);
           const updateFirebaseMembers = await updateDoc(
             selectRemoveMemberModal,
             {
@@ -42,7 +39,6 @@ const RemoveMemberModal: React.FC<IProps> = ({
           return updateFirebaseMembers;
         }
       });
-      console.log("Üye Silindi");
       return updateMembers;
     } catch (error) {
       console.log("ERROR", error);

@@ -28,10 +28,8 @@ type Iparams = {
 const GrupHomePage: React.FC = () => {
   const [openModal, setOpenModal] = useState(false);
   const [deneme, setDeneme] = useState<IGroup[]>([]);
-  console.log("denemedeki veriler", deneme);
   const [boardName, setBoardName] = useState<string>("");
   const params: Iparams = useParams();
-  console.log("akakakakakak", params);
   const auth = useSelector((state: RootState) => state.auth.userDetails);
 
   useEffect(() => {
@@ -70,7 +68,6 @@ const GrupHomePage: React.FC = () => {
           (a: any, b: any) => a.position - b.position
         );
         setDeneme(sortedData);
-        console.log("veri geldi");
       },
       (error) => {
         console.log(error);
@@ -92,7 +89,6 @@ const GrupHomePage: React.FC = () => {
       "lists"
     );
     const listRef = doc(listCollection, listId);
-    console.log("listID:", listId);
     deneme.forEach(async (list) => {
       if (list.id === listId) {
         await updateDoc(listRef, {
@@ -185,7 +181,6 @@ const GrupHomePage: React.FC = () => {
         return card;
       });
       const listRef = doc(saveCardCollection, destination.droppableId);
-      console.log("listRef", listRef.id);
       await updateDoc(listRef, {
         items: updatedCards,
       });
@@ -197,7 +192,6 @@ const GrupHomePage: React.FC = () => {
       const draggingCard = sourceList?.items.filter(
         (card) => card.id === draggableId
       )[0];
-      console.log("xxxxxxxxxxxxxxx", draggingCard);
       const sourceListRef = doc(
         collection(db, "group-boards", `${params.groupId}`, "lists"),
         source.droppableId

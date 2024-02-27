@@ -28,7 +28,6 @@ export const createNewGroupList = createAsyncThunk<
   { state: RootState }
 >("posts/fetchGroupPosts", async (data, { getState }) => {
   const state = getState();
-  console.log("ASD ASD ASD ASD ASD ", data);
   try {
     const userAddCardCollection = collection(
       db,
@@ -46,7 +45,6 @@ export const createNewGroupList = createAsyncThunk<
       createdBy: state.providerGroup.authentication || "",
       items: [],
     });
-    console.log("ekeleme başarılı");
     return updateSelectedData;
   } catch (error) {
     console.error("Error adding document: ", error);
@@ -58,7 +56,6 @@ export const providerGroupSlice = createSlice({
   initialState: providerInitialState,
   reducers: {
     getGroupBoardId(state, actions) {
-      console.log("BOARD NAME", actions.payload);
       state.boardId = actions.payload;
     },
   },

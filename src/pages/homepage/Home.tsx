@@ -39,7 +39,6 @@ const HomePage: FC = () => {
   });
   const reversedSortedLastEntries = sortedLastEntries.reverse();
   const getFirstThreeElement = reversedSortedLastEntries.splice(0, 3);
-  console.log("DENEM", getFirstThreeElement);
   const navigate = useNavigate();
   const auth = useSelector((state: RootState) => state.auth.userDetails);
   useEffect(() => {
@@ -59,7 +58,6 @@ const HomePage: FC = () => {
         });
 
         setLastEntries(cities);
-        console.log("BOARDLAR", cities);
       },
       (error) => {
         console.log(error);
@@ -84,8 +82,6 @@ const HomePage: FC = () => {
               <div
                 onClick={() => {
                   navigate(`/groupboard/${item.id}`);
-
-                  console.log("BOARD İD", item.id);
                 }}
                 className="board flex justify-center p-8 items-center h-full w-[85%] cursor-pointer rounded-lg break-all"
               >

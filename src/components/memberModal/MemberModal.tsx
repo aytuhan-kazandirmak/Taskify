@@ -25,11 +25,11 @@ type IMemberModalProps = {
 const MemberModal: React.FC<IMemberModalProps> = ({
   setAddMember,
   addMember,
-  board,
+
   currentBoardId,
 }) => {
   const dispatch: AppDispatch = useDispatch();
-  console.log("BOAAAAAAAAAAAAARD", board);
+
   const {
     reset,
     register,
@@ -56,7 +56,6 @@ const MemberModal: React.FC<IMemberModalProps> = ({
               dispatch(
                 addNewMember({ email: data.email, boardId: currentBoardId })
               );
-              console.log("SELAAAAAAAAAAAAAAAM", data);
               setAddMember(false);
             })}
           >

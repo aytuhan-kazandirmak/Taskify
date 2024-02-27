@@ -20,21 +20,18 @@ const Signup = () => {
 
   const navigate = useNavigate();
   const registerFunc = async (dataObj: Inputs): Promise<any> => {
-    console.log(dataObj);
     try {
       const data = await createUserWithEmailAndPassword(
         auth,
         dataObj.email,
         dataObj.password1
       );
-      console.log("auth nedir", auth);
       console.log(data);
       const update = await updateProfile(auth.currentUser!, {
         displayName: dataObj.fullname,
         photoURL: "https://cdn-icons-png.flaticon.com/512/1077/1077114.png",
       });
 
-      console.log("current user", auth.currentUser);
       navigate("/login");
       return update;
     } catch (error: any) {
