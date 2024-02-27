@@ -3,13 +3,18 @@ import { RootState } from "../reducer/store";
 import { Navigate } from "react-router-dom";
 
 import { Outlet } from "react-router-dom";
+import { useEffect } from "react";
 
 const PrivateRouteComponent = () => {
   const userDetails = useSelector((state: RootState) => state.auth.userDetails);
+  const localToken = JSON.parse(localStorage.getItem("email"));
 
-  if (!userDetails) {
-    return <Navigate to="/login" replace />;
-  }
+  useEffect(() => {
+    if (!userDetails || !localToken) {
+      return <Navigate to="/login" replace />;
+    }
+  }, []);
+
   return <Outlet />;
 };
 

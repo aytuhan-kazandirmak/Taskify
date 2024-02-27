@@ -18,9 +18,11 @@ export const authSlice = createSlice({
   reducers: {
     login(state, actions) {
       state.userDetails = actions.payload;
+      localStorage.setItem("email", JSON.stringify(actions.payload));
     },
     logout(state) {
       state.userDetails = "";
+      localStorage.removeItem("email");
     },
   },
 });
