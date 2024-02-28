@@ -81,7 +81,7 @@ const RemoveMemberModal: React.FC<IProps> = ({
                 color: "#fff",
                 border: "1px solid gray",
               }}
-              placeholder="Silinecek üyenin email adresini giriniz"
+              placeholder="Silinecek üyenin email adresini giriniz..."
               required
             />
             {errors.email && (
@@ -89,10 +89,10 @@ const RemoveMemberModal: React.FC<IProps> = ({
             )}
             <div className="flex justify-center gap-4 mt-5">
               <Button type="submit" className="bg-[#2e2e2e] hover:bg-zinc-900">
-                {"Yes, I'm sure"}
+                Sil
               </Button>
               <Button color="gray" onClick={() => setModalRemove(false)}>
-                No, cancel
+                Vazgeç
               </Button>
             </div>
           </form>

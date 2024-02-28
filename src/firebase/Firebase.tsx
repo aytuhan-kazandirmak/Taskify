@@ -18,12 +18,12 @@ import {
   orderBy,
 } from "firebase/firestore";
 const firebaseConfig = {
-  apiKey: "AIzaSyA4n3pNpgUZSPCLBEpx2Mgw6XCPK5UHAtQ",
-  authDomain: "taskify-43776.firebaseapp.com",
-  projectId: "taskify-43776",
-  storageBucket: "taskify-43776.appspot.com",
-  messagingSenderId: "981326637914",
-  appId: "1:981326637914:web:d8860b99a1983525a7a163",
+  apiKey: import.meta.env.VITE_API_KEY,
+  authDomain: import.meta.env.VITE_AUTH,
+  projectId: import.meta.env.VITE_PROJECT_ID,
+  storageBucket: import.meta.env.VITE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_MESSAGIN_SENDER_ID,
+  appId: import.meta.env.VITE_APP_ID,
 };
 
 const app = initializeApp(firebaseConfig);

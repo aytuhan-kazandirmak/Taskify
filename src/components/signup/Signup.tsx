@@ -1,4 +1,4 @@
-import { Button, Checkbox, Label, TextInput } from "flowbite-react";
+import { Button, Label, TextInput } from "flowbite-react";
 import { useForm } from "react-hook-form";
 import "./signup.css";
 import { createUserWithEmailAndPassword, auth } from "../../firebase/Firebase";
@@ -58,7 +58,7 @@ const Signup = () => {
             {...register("fullname")}
             id="fullname"
             type="text"
-            placeholder="Jack Allison"
+            placeholder="Aytuhan Kazandırmak"
             required
             shadow
           />
@@ -71,7 +71,7 @@ const Signup = () => {
             {...register("email")}
             id="email2"
             type="email"
-            placeholder="name@flowbite.com"
+            placeholder="email@gmail.com"
             required
             shadow
           />
@@ -89,6 +89,7 @@ const Signup = () => {
             id="password2"
             type="password"
             required
+            placeholder="******"
             shadow
           />
           {errors.password2 && (
@@ -107,22 +108,12 @@ const Signup = () => {
             {...register("password1")}
             id="repeat-password"
             type="password"
+            placeholder="******"
             required
             shadow
           />
         </div>
-        <div className="flex items-center gap-2">
-          <Checkbox id="agree" />
-          <Label htmlFor="agree" className="flex text-slate-200">
-            I agree with the&nbsp;
-            <a
-              href="#"
-              className="text-cyan-600 hover:underline dark:text-cyan-500"
-            >
-              terms and conditions
-            </a>
-          </Label>
-        </div>
+        <div className="flex items-center gap-2"></div>
         <Button type="submit">Kayıt ol</Button>
       </form>
     </div>

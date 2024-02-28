@@ -65,7 +65,7 @@ const Login = () => {
             {...register("email")}
             id="email1"
             type="email"
-            placeholder="name@flowbite.com"
+            placeholder="email@gmail.com"
           />
         </div>
         <div>

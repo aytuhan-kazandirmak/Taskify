@@ -69,16 +69,16 @@ const MemberModal: React.FC<IMemberModalProps> = ({
               }}
               id="email"
               type="email"
-              placeholder="name@company.com"
+              placeholder="Eklenecek üyenin mail adresini giriniz..."
               required
             />
             {errors.email && <span>This field is required</span>}
             <div className="flex justify-center gap-4 mt-5">
               <Button type="submit" className="bg-[#2e2e2e] hover:bg-zinc-900">
-                {"Yes, I'm sure"}
+                Ekle
               </Button>
               <Button color="gray" onClick={() => setAddMember(false)}>
-                No, cancel
+                Vazgeç
               </Button>
             </div>
           </form>
