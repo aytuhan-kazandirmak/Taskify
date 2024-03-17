@@ -4,10 +4,9 @@ import { useForm } from "react-hook-form";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
-// import { authActions } from "../../reducer/firebaseSlice";
 import { login, logout } from "../../reducer/firebaseSlice";
-import { Dispatch } from "@reduxjs/toolkit";
 import "./login.css";
+import { AppDispatch } from "../../reducer/store";
 type Inputs = {
   email: string;
   password: string;
@@ -15,8 +14,7 @@ type Inputs = {
 
 const Login = () => {
   const navigate = useNavigate();
-  const dispatch: Dispatch<any> = useDispatch();
-  // const { login, logout } = authActions;
+  const dispatch: AppDispatch = useDispatch();
 
   const loginFunc = async (dataObj: Inputs): Promise<void> => {
     try {
@@ -25,9 +23,16 @@ const Login = () => {
         dataObj.email,
         dataObj.password
       );
-      const userDetails = data.user;
-      if (userDetails) {
-        dispatch(login(userDetails.email));
+      const userInformation = data.user;
+      if (userInformation) {
+        localStorage.setItem(
+          "userInformation",
+          JSON.stringify({
+            displayName: userInformation.displayName,
+            email: userInformation.email,
+          })
+        );
+        dispatch(login(userInformation.email));
         navigate("/");
       } else {
         dispatch(logout(undefined));
@@ -63,7 +68,6 @@ const Login = () => {
           <TextInput
             className=""
             {...register("email")}
-            id="email1"
             type="email"
             placeholder="email@gmail.com"
           />
@@ -78,7 +82,6 @@ const Login = () => {
           </div>
           <TextInput
             {...register("password", { required: true })}
-            id="password1"
             type="password"
             placeholder="********"
           />

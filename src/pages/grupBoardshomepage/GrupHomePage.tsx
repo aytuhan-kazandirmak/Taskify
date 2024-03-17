@@ -30,7 +30,9 @@ const GrupHomePage: React.FC = () => {
   const [deneme, setDeneme] = useState<IGroup[]>([]);
   const [boardName, setBoardName] = useState<string>("");
   const params: Iparams = useParams();
-  const auth = useSelector((state: RootState) => state.auth.userDetails);
+  const auth = useSelector(
+    (state: RootState) => state.auth.userInformation?.email
+  );
 
   useEffect(() => {
     const getBoardName = async () => {

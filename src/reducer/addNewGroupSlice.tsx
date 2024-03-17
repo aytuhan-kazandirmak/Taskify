@@ -31,7 +31,7 @@ export const addGroupBoard = createAsyncThunk<
     const seletGroupDoc = doc(groupBoardCollection, groupDoc.id);
     const updateGroupDoc = await updateDoc(seletGroupDoc, {
       id: groupDoc.id,
-      created: state.addNewGroupBoard.authentication,
+      created: state.auth.userInformation?.email,
     });
 
     return updateGroupDoc;
@@ -55,7 +55,6 @@ export const addNewGroupBoard = createSlice({
       .addCase(addGroupBoard.rejected, (state) => {
         state.status = "failed";
       });
-
     builder
       .addCase(login, (state, action) => {
         state.authentication = action.payload;

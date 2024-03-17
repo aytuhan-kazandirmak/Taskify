@@ -2,7 +2,6 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { arrayUnion, collection, doc, updateDoc } from "firebase/firestore";
 import { db } from "../firebase/Firebase";
 import { login, logout } from "./firebaseSlice";
-
 type IcreateBoardInitialState = {
   boardName: string | undefined;
   status: "idle" | "loading" | "succeeded" | "failed";

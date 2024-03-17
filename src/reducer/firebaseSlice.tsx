@@ -1,13 +1,17 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { IUserInformation } from "../components/kanban/commonTypes";
+
 type TState = {
   loading: boolean;
   userDetails: string;
+  userInformation: IUserInformation | undefined;
   error: null;
   success: boolean;
 };
 const authInitialState: TState = {
   loading: false,
   userDetails: "",
+  userInformation: undefined,
   error: null,
   success: false,
 };
@@ -18,13 +22,18 @@ export const authSlice = createSlice({
   reducers: {
     login(state, actions) {
       state.userDetails = actions.payload;
-      localStorage.setItem("email", JSON.stringify(state.userDetails));
+      console.log("123", state.userDetails);
     },
     logout(state) {
       state.userDetails = "";
-      localStorage.removeItem("email");
+      localStorage.removeItem("userInformation");
+    },
+    onAuthState(state, actions) {
+      state.userInformation = actions.payload;
+      console.log(actions.payload);
+      console.log("state userinformation", state.userInformation);
     },
   },
 });
 
-export const { login, logout } = authSlice.actions;
+export const { login, logout, onAuthState } = authSlice.actions;

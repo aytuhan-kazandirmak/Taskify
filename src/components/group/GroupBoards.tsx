@@ -24,7 +24,6 @@ import { useNavigate } from "react-router-dom";
 import { Menu, Transition } from "@headlessui/react";
 import { Fragment } from "react";
 import "./groupBoards.css";
-
 import RemoveMemberModal from "../removemembermodal/RemoveMemberModal";
 import { AppDispatch, RootState } from "../../reducer/store";
 import DetailsModal from "../boarddetails/DetailsModal";
@@ -67,7 +66,9 @@ const GroupBoards: React.FC = () => {
   const [detailsModal, setDetailsModal] = useState<IDetails | undefined>();
   const [openModal, setOpenModal] = useState<boolean>(false);
   const [groupBoards, setGroupBoards] = useState<IBoard[]>([]);
-  const auth = useSelector((state: RootState) => state.auth.userDetails);
+  const auth = useSelector(
+    (state: RootState) => state.auth.userInformation?.email
+  );
   const navigate = useNavigate();
   useEffect(() => {
     const userCardCollection = collection(db, "group-boards");
@@ -80,10 +81,13 @@ const GroupBoards: React.FC = () => {
         const cities: IBoard[] = [];
         querySnapshot.forEach((doc) => {
           const member = doc.data().member;
-          const controlll =
-            member && member.some((item: string) => item.includes(auth));
+          let control;
+          if (auth) {
+            control =
+              member && member.some((item: string) => item.includes(auth));
+          }
 
-          if (doc.data().created === auth || controlll) {
+          if (doc.data().created === auth || control) {
             cities.push({ id: doc.id, ...doc.data() } as IBoard);
           }
         });

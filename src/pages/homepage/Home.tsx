@@ -40,7 +40,9 @@ const HomePage: FC = () => {
   const reversedSortedLastEntries = sortedLastEntries.reverse();
   const getFirstThreeElement = reversedSortedLastEntries.splice(0, 3);
   const navigate = useNavigate();
-  const auth = useSelector((state: RootState) => state.auth.userDetails);
+  const auth = useSelector(
+    (state: RootState) => state.auth.userInformation?.email
+  );
   useEffect(() => {
     const userCardCollection = collection(db, "group-boards");
     const q = query(userCardCollection);
@@ -50,9 +52,12 @@ const HomePage: FC = () => {
         const cities: Iboard[] = [];
         querySnapshot.forEach((doc) => {
           const member = doc.data().member;
-          const controlll =
-            member && member.some((item: string) => item.includes(auth));
-          if (doc.data().created === auth || controlll) {
+          let control;
+          if (auth) {
+            control =
+              member && member.some((item: string) => item.includes(auth));
+          }
+          if (doc.data().created === auth || control) {
             cities.push({ ...(doc.data() as Iboard) });
           }
         });

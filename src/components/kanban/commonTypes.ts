@@ -15,3 +15,8 @@ export interface IGroup {
   name: string;
   position?: any;
 }
+
+export type IUserInformation = {
+  displayName: string;
+  email: string;
+};
