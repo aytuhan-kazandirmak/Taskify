@@ -75,6 +75,7 @@ const RemoveMemberModal: React.FC<IProps> = ({
               {...register("email", { required: true })}
               id="email"
               type="email"
+              autoComplete="false"
               style={{
                 backgroundColor: "black",
                 outline: "none",

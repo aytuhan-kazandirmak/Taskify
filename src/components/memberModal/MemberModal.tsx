@@ -67,6 +67,7 @@ const MemberModal: React.FC<IMemberModalProps> = ({
                 color: "#fff",
                 border: "1px solid gray",
               }}
+              autoComplete="false"
               id="email"
               type="email"
               placeholder="Eklenecek üyenin mail adresini giriniz..."

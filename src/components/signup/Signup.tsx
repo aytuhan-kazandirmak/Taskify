@@ -55,6 +55,7 @@ const Signup = () => {
             <Label className="text-slate-200" htmlFor="email2" value="İsim" />
           </div>
           <TextInput
+            autoComplete="false"
             {...register("fullname")}
             id="fullname"
             type="text"
@@ -68,6 +69,7 @@ const Signup = () => {
             <Label className="text-slate-200" htmlFor="email2" value="Email" />
           </div>
           <TextInput
+            autoComplete="false"
             {...register("email")}
             id="email2"
             type="email"
@@ -85,6 +87,7 @@ const Signup = () => {
             />
           </div>
           <TextInput
+            autoComplete="false"
             {...register("password2")}
             id="password2"
             type="password"
@@ -105,6 +108,7 @@ const Signup = () => {
             />
           </div>
           <TextInput
+            autoComplete="false"
             {...register("password1")}
             id="repeat-password"
             type="password"

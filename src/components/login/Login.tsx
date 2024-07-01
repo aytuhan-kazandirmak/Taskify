@@ -66,7 +66,7 @@ const Login = () => {
             <Label className="text-slate-200" htmlFor="email1" value="Email" />
           </div>
           <TextInput
-            className=""
+            autoComplete="false"
             {...register("email")}
             type="email"
             placeholder="email@gmail.com"
@@ -81,6 +81,7 @@ const Login = () => {
             />
           </div>
           <TextInput
+            autoComplete="false"
             {...register("password", { required: true })}
             type="password"
             placeholder="********"

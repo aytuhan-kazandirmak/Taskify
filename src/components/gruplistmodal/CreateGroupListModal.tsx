@@ -67,6 +67,7 @@ const CreateGroupListModal: React.FC<iProps> = ({
                     color: "#fff",
                     border: "1px solid gray",
                   }}
+                  autoComplete="false"
                   {...register("name", { required: true })}
                   id="name"
                   type="name"
